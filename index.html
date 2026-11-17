@@ -497,7 +497,7 @@ code{font-family:var(--mono);background:var(--card2);border:1px solid var(--line
         <textarea id="jdInput" placeholder="Paste the job description you are applying for"></textarea>
         <div class="row" style="margin-top:14px;"><button class="btn primary block" id="run" type="button">Check my resume</button></div>
         <div class="row" style="margin-top:10px;"><button class="btn sm" id="clearBtn" type="button">Clear all</button></div>
-        <p class="hint">Your draft is remembered in this browser only. Fixes change the editable text, never your original file.</p>
+        <p class="hint">A refresh starts a new check. Your last resume stays in this browser so you can restore it, until you press Clear all. Fixes change the editable text, never your original file.</p>
       </div>
     </div>
     <div class="stack" id="resultsPanel">
@@ -728,10 +728,15 @@ $('sampleBtn').addEventListener('click', ()=>{
   if(!jdEl.value.trim()) jdEl.value = 'Job title: SCADA Engineer\nWe are hiring a SCADA Engineer for substation automation projects. Required: SCADA, RTU, PLC programming, IEC 61850, IEC 60870-5-104, Modbus, testing and commissioning, troubleshooting, FAT and SAT, technical documentation. Python scripting and network security knowledge preferred. Good communication and teamwork with client coordination.';
   saveDraft(); setStatus('Sample resume loaded. It is fictional.', 'ok'); runSat(); toBench();
 });
-(function restore(){
+/* a refresh starts with an empty page; the last resume is only offered back, never filled in by itself */
+(function offerRestore(){
   const r = store.get('rsat_resume'), j = store.get('rsat_jd');
-  if(r) resumeEl.value = r;
-  if(j) jdEl.value = j;
+  if(!r || r.trim().length < 40) return;
+  const first = (r.trim().split('\n')[0] || '').replace(/\(.*?\)/g,'').trim().slice(0,40);
+  uploadStatus.className = 'status';
+  uploadStatus.innerHTML = `Your last resume${first ? ' (' + esc(first) + ')' : ''} is saved in this browser. <button type="button" class="btn sm" id="rsRestore">Restore it</button> <button type="button" class="btn sm" id="rsForget">Delete it</button>`;
+  $('rsRestore').onclick = ()=>{ resumeEl.value = r; if(j) jdEl.value = j; setStatus('Your last resume is back. Your report is below.', 'ok'); runSat(); toBench(); };
+  $('rsForget').onclick = ()=>{ store.del('rsat_resume'); store.del('rsat_jd'); setStatus('Deleted. This browser no longer keeps your last resume.', 'ok'); };
 })();
 
 /* ---------- analysis data ---------- */
