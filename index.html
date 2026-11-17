@@ -497,7 +497,7 @@ code{font-family:var(--mono);background:var(--card2);border:1px solid var(--line
         <textarea id="jdInput" placeholder="Paste the job description you are applying for"></textarea>
         <div class="row" style="margin-top:14px;"><button class="btn primary block" id="run" type="button">Check my resume</button></div>
         <div class="row" style="margin-top:10px;"><button class="btn sm" id="clearBtn" type="button">Clear all</button></div>
-        <p class="hint">A refresh starts a new check. Your last resume stays in this browser so you can restore it, until you press Clear all. Fixes change the editable text, never your original file.</p>
+        <p class="hint">Nothing is saved: a refresh clears everything and starts a new check. Fixes change the editable text, never your original file.</p>
       </div>
     </div>
     <div class="stack" id="resultsPanel">
@@ -608,7 +608,7 @@ code{font-family:var(--mono);background:var(--card2);border:1px solid var(--line
     <details><summary>What is an ATS, and why should I care?</summary><p>An applicant tracking system is the software most large companies use to collect applications. It converts your resume to text, stores it in fields and lets recruiters search and rank candidates. If it cannot read your file, or your resume lacks the job's keywords, a recruiter may never open it.</p></details>
     <details><summary>What is a good score?</summary><p>80 or above means the resume parses cleanly and reads well. 60 to 79 is a conditional pass with clear gaps to fix. No checker can give a certified ATS score, because every ATS product behaves differently, so use the number as a direction and the failed checks as your to-do list.</p></details>
     <details><summary>Can an ATS read PDFs, columns, icons and charts?</summary><p>Text PDFs and Word files are read well. Scanned or image-only PDFs are not read at all. Two-column layouts and tables are often read across the page, which mixes lines together. Icons, emoji, charts and skill bars are dropped or turned into stray characters, so write the information as plain text.</p></details>
-    <details><summary>Is my resume uploaded or stored anywhere?</summary><p>Everything runs inside your browser: scoring, PDF reading, fixes, the editor and downloads. Your resume is never uploaded to a server. Your draft is saved only in this browser so you can come back to it.</p></details>
+    <details><summary>Is my resume uploaded or stored anywhere?</summary><p>Everything runs inside your browser: scoring, PDF reading, fixes, the editor and downloads. Your resume is never uploaded to a server. Nothing is saved after you close or refresh the page.</p></details>
     <details class="ai-faq" hidden><summary>Will the AI upgrade invent experience I do not have?</summary><p>It is instructed to use only the facts in your resume and to leave a placeholder such as [X%] where a number is missing. Always read the preview before you use it, and replace every placeholder with a real figure.</p></details>
     <details><summary>Why does my score change when I add a job description?</summary><p>Without a job description, the score covers parsing, sections, content and red flags. Adding one unlocks four more checks (hard skills, soft skills, job title and keywords) and a job match percentage. If your resume lacks most of the skills the job asks for, the overall score is capped, because a well-written resume for the wrong job will still be filtered out. Paste the full job posting, not just the title, for an accurate match.</p></details>
     <details><summary>Which template should I pick?</summary><p>For job portals, pick one marked ATS-safe: Corporate Classic for MNC and banking roles, Tech MNC for IT, Core Engineering for power, EPC and manufacturing, Campus Fresher for graduates. Career Timeline and Monogram add a premium look and stay single-column. The two sidebar templates use two columns, which some ATS software mixes up, so keep those for emailing a recruiter directly or for print.</p></details>
@@ -632,12 +632,13 @@ if(window.pdfjsLib){ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.clo
 const $ = id => document.getElementById(id);
 const esc = s => String(s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const reEsc = s => s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
-const store = {
-  mem:{},
-  get(k){ try{ const v = localStorage.getItem(k); return v===null ? (this.mem[k]??null) : v; }catch(e){ return this.mem[k]??null; } },
-  set(k,v){ this.mem[k]=v; try{ localStorage.setItem(k,v); }catch(e){} },
-  del(k){ delete this.mem[k]; try{ localStorage.removeItem(k); }catch(e){} }
-};
+/* nothing is kept between visits: a refresh starts a completely fresh check */
+const store = { mem:{}, get(k){ return this.mem[k] ?? null; }, set(k,v){ this.mem[k]=v; }, del(k){ delete this.mem[k]; } };
+try{ Object.keys(localStorage).filter(k=> k.indexOf('rsat_')===0).forEach(k=> localStorage.removeItem(k)); }catch(e){}
+/* a refresh opens at the top of the page, not at the section that was last linked */
+try{ if('scrollRestoration' in history) history.scrollRestoration = 'manual'; }catch(e){}
+try{ if(location.hash) history.replaceState(null, '', location.pathname + location.search); }catch(e){}
+try{ window.scrollTo(0,0); window.addEventListener('load', ()=> window.scrollTo(0,0)); }catch(e){}
 
 /* ---------- capabilities ---------- */
 /* the same file also runs on any ordinary web host: there, files are saved with a normal browser download */
@@ -728,16 +729,7 @@ $('sampleBtn').addEventListener('click', ()=>{
   if(!jdEl.value.trim()) jdEl.value = 'Job title: SCADA Engineer\nWe are hiring a SCADA Engineer for substation automation projects. Required: SCADA, RTU, PLC programming, IEC 61850, IEC 60870-5-104, Modbus, testing and commissioning, troubleshooting, FAT and SAT, technical documentation. Python scripting and network security knowledge preferred. Good communication and teamwork with client coordination.';
   saveDraft(); setStatus('Sample resume loaded. It is fictional.', 'ok'); runSat(); toBench();
 });
-/* a refresh starts with an empty page; the last resume is only offered back, never filled in by itself */
-(function offerRestore(){
-  const r = store.get('rsat_resume'), j = store.get('rsat_jd');
-  if(!r || r.trim().length < 40) return;
-  const first = (r.trim().split('\n')[0] || '').replace(/\(.*?\)/g,'').trim().slice(0,40);
-  uploadStatus.className = 'status';
-  uploadStatus.innerHTML = `Your last resume${first ? ' (' + esc(first) + ')' : ''} is saved in this browser. <button type="button" class="btn sm" id="rsRestore">Restore it</button> <button type="button" class="btn sm" id="rsForget">Delete it</button>`;
-  $('rsRestore').onclick = ()=>{ resumeEl.value = r; if(j) jdEl.value = j; setStatus('Your last resume is back. Your report is below.', 'ok'); runSat(); toBench(); };
-  $('rsForget').onclick = ()=>{ store.del('rsat_resume'); store.del('rsat_jd'); setStatus('Deleted. This browser no longer keeps your last resume.', 'ok'); };
-})();
+
 
 /* ---------- analysis data ---------- */
 const BUL = /^[•\-\*▪●○◦‣·]\s*/;
