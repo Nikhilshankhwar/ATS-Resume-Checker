@@ -360,6 +360,31 @@ code{font-family:var(--mono);background:var(--card2);border:1px solid var(--line
 .gstep a{font-size:13.5px;font-weight:600;color:var(--steel);text-decoration:none;}
 .gstep a:hover{text-decoration:underline;}
 
+
+/* top notice + reviews */
+.notice{background:var(--accent);color:var(--accent-ink);font-size:14px;font-weight:600;}
+.notice .wrap{display:flex;gap:10px 14px;align-items:center;justify-content:center;flex-wrap:wrap;padding-block:8px;text-align:center;}
+.notice a{color:inherit;background:rgba(0,0,0,.18);padding:4px 11px;border-radius:20px;text-decoration:none;font-size:13px;white-space:nowrap;}
+.notice a:hover{background:rgba(0,0,0,.3);}
+.rv{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.8fr);gap:22px;align-items:start;}
+@media (max-width:860px){.rv{grid-template-columns:1fr;}}
+.rv form{display:grid;gap:14px;}
+.rv label.lbl{margin:0 0 6px;}
+.stars{display:flex;gap:4px;flex-direction:row-reverse;justify-content:flex-end;}
+.stars input{position:absolute;opacity:0;width:1px;height:1px;}
+.stars label{font-size:32px;line-height:1;color:var(--line);cursor:pointer;padding:0 2px;transition:color .1s ease;}
+.stars input:checked ~ label,.stars label:hover,.stars label:hover ~ label{color:#F2A33A;}
+.stars input:focus-visible + label{outline:2px solid var(--steel);border-radius:4px;}
+.rv select,.rv input[type=text],.rv input[type=email]{width:100%;background:var(--card2);border:1px solid var(--line);border-radius:8px;padding:9px 11px;font-size:14px;}
+.rv textarea{min-height:120px;}
+.rv .two-in{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+@media (max-width:520px){.rv .two-in{grid-template-columns:1fr;}}
+.rv .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;}
+.rv .chk{display:flex;gap:8px;align-items:flex-start;font-size:13px;color:var(--muted);}
+.rv .chk input{margin-top:3px;}
+.rv-side{display:grid;gap:12px;}
+.rv-side .exp ul{margin:6px 0 0;padding-left:18px;color:var(--muted);font-size:14px;}
+
 /* explainer + faq */
 .two{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
 @media (max-width:820px){.two{grid-template-columns:1fr;}}
@@ -388,6 +413,7 @@ code{font-family:var(--mono);background:var(--card2);border:1px solid var(--line
 </style>
 </head>
 <body>
+<div class="notice" role="note"><div class="wrap"><span>Please leave a review if you face any problems! It helps us fix them fast.</span><a href="#reviews">Write a review</a></div></div>
 <nav class="nav"><div class="wrap">
   <div class="logo">RESUME<span>·</span>SAT</div>
   <div class="nav-links">
@@ -396,6 +422,7 @@ code{font-family:var(--mono);background:var(--card2);border:1px solid var(--line
     <a href="#editor">Edit</a>
     <a href="#templates">Templates</a>
     <a href="#how" class="opt">How scoring works</a>
+    <a href="#reviews">Reviews</a>
     <a href="#faq" class="opt">FAQ</a>
   </div>
 </div></nav>
@@ -539,7 +566,43 @@ code{font-family:var(--mono);background:var(--card2);border:1px solid var(--line
   <div class="cklist" id="ckList"></div>
 </div></section>
 
-<section class="sec" id="faq"><div class="wrap">
+<section class="sec" id="reviews"><div class="wrap">
+  <div class="sec-head"><div><div class="kicker">Your feedback</div><h2>Reviews</h2><p>Found a problem, a wrong score or a missing feature? Tell us here. Every review is read, and problems get fixed in the next update.</p></div></div>
+  <div class="rv">
+    <div class="panel">
+      <form id="reviewForm" novalidate>
+        <div>
+          <span style="display:block;font-size:13.5px;font-weight:600;margin-bottom:6px;">Your rating</span>
+          <div class="stars" role="radiogroup" aria-label="Rating out of 5">
+            <input type="radio" name="rating" id="st5" value="5"><label for="st5" title="5 stars">★</label>
+            <input type="radio" name="rating" id="st4" value="4"><label for="st4" title="4 stars">★</label>
+            <input type="radio" name="rating" id="st3" value="3"><label for="st3" title="3 stars">★</label>
+            <input type="radio" name="rating" id="st2" value="2"><label for="st2" title="2 stars">★</label>
+            <input type="radio" name="rating" id="st1" value="1"><label for="st1" title="1 star">★</label>
+          </div>
+        </div>
+        <div><label class="lbl" for="rvType">What is it about?</label>
+          <select id="rvType"><option value="problem">A problem or wrong result</option><option value="suggestion">A suggestion or new feature</option><option value="praise">Something I liked</option><option value="other">Something else</option></select></div>
+        <div><label class="lbl" for="rvMsg">Your review</label>
+          <textarea id="rvMsg" maxlength="1500" placeholder="What happened, and what did you expect? For example: I uploaded my PDF and the bullets showed as plain text."></textarea></div>
+        <div class="two-in">
+          <div><label class="lbl" for="rvName">Name <span style="font-weight:400;color:var(--muted)">(optional)</span></label><input type="text" id="rvName" maxlength="60" autocomplete="name"></div>
+          <div><label class="lbl" for="rvEmail">Email <span style="font-weight:400;color:var(--muted)">(optional, only to reply)</span></label><input type="email" id="rvEmail" maxlength="120" autocomplete="email"></div>
+        </div>
+        <div class="hp" aria-hidden="true"><label for="rvWebsite">Leave this empty</label><input type="text" id="rvWebsite" tabindex="-1" autocomplete="off"></div>
+        <label class="chk" for="rvTech"><input type="checkbox" id="rvTech" checked> Include technical details to help fix the problem: your browser, screen size, file type and score. Your resume text is never included.</label>
+        <div class="row"><button class="btn primary" type="submit" id="rvSend">Send review</button></div>
+        <div class="status" id="rvStatus" aria-live="polite"></div>
+      </form>
+    </div>
+    <div class="rv-side">
+      <div class="exp"><h3>What helps most</h3><ul><li>What you clicked, and what you expected to happen.</li><li>The job you were checking against, if the score looked wrong.</li><li>Your phone or computer and browser.</li></ul></div>
+      <div class="exp"><h3>Privacy</h3><p>Your review goes only to the site owner. Your name and email are optional and are used only to reply to you. Your resume is never sent with a review.</p></div>
+    </div>
+  </div>
+</div></section>
+
+<section class="sec alt" id="faq"><div class="wrap">
   <div class="sec-head"><div><div class="kicker">Questions</div><h2>FAQ</h2></div></div>
   <div class="faq">
     <details><summary>What is an ATS, and why should I care?</summary><p>An applicant tracking system is the software most large companies use to collect applications. It converts your resume to text, stores it in fields and lets recruiters search and rank candidates. If it cannot read your file, or your resume lacks the job's keywords, a recruiter may never open it.</p></details>
@@ -681,9 +744,9 @@ const STOPWORDS = new Set("a about above after again against all also am an and 
 const SKILL_PHRASES = ["scada","rtu","plc","hmi","dcs","ied","iec 60870-5-104","iec 60870-5-103","iec 60870-5-101","iec 61850","iec 62443","iec 104","iec 103","modbus","modbus tcp","modbus rtu","dnp3","opc ua","opc da","profibus","profinet","goose","gps synchronization","time synchronization","ntp","ptp","substation automation","traction power","power distribution","power systems","protection relay","relay testing","switchgear","transformer","single line diagram","sld","io list","i/o list","point-to-point testing","loop checking","fat","sat","factory acceptance test","site acceptance test","commissioning","testing and commissioning","troubleshooting","root cause analysis","preventive maintenance","ems","adms","dms","historian","telemetry","fiber optic","ethernet","tcp/ip","osi model","vlan","routing","switching","firewall","vpn","ids","ips","siem","nmap","wireshark","network security","ot security","ics security","cybersecurity","cyber security","nist","iso 27001","risk assessment","vulnerability assessment","penetration testing","incident response","hardening","patch management","active directory","windows server","linux","sql","sql server","python","java","javascript","typescript","react","node.js","c++","c#",".net","matlab","autocad","autocad electrical","eplan","etap","ms office","excel","power bi","tableau","sap","git","scripting","automation","control systems","pid","instrumentation","electrical design","project management","site supervision","vendor coordination","client coordination","documentation","technical documentation","as-built","quality assurance","quality control","six sigma","lean","hse","safety","metro","railway","railways","oil and gas","renewable","solar","bess","cloud","aws","azure","gcp","docker","kubernetes","rest api","agile","scrum","jira","data analysis","machine learning","supply chain","procurement","budgeting","erp","salesforce","seo","financial modelling","financial modeling","accounting","gst","tally"];
 
 /* skills that go by several names: the first name is shown, any name counts as a match */
-const SKILL_ALIASES = [["artificial intelligence","ai"],["machine learning","ml"],["deep learning","neural networks"],["natural language processing","nlp"],["computer vision"],["large language models","llm","llms"],["generative ai","genai","gen ai"],["tensorflow"],["pytorch"],["keras"],["scikit-learn","sklearn"],["pandas"],["numpy"],["data science"],["data engineering"],["data visualization"],["statistics"],["mlops"],["model deployment","deployed models","deploying models","model serving","deployed ml models"],["hugging face","huggingface"],["langchain"],["retrieval augmented generation","rag"],["prompt engineering"],["opencv"],["spark","pyspark"],["hadoop"],["javascript","js"],["kubernetes","k8s"],["react","react.js","reactjs"],["html"],["css"],["node.js","nodejs"],["django"],["flask"],["fastapi"],["spring boot"],["mongodb"],["postgresql","postgres"],["mysql"],["microservices"],["ci/cd"],["jenkins"],["terraform"],["figma"],["photoshop"],["digital marketing"],["recruitment","talent acquisition"],["payroll"],["taxation"],["auditing"]];
+const SKILL_ALIASES = [["artificial intelligence","ai"],["machine learning","ml"],["deep learning","neural networks"],["natural language processing","nlp"],["computer vision"],["large language models","llm","llms"],["generative ai","genai","gen ai"],["tensorflow"],["pytorch"],["keras"],["scikit-learn","sklearn"],["pandas"],["numpy"],["data science"],["data engineering"],["data visualization"],["statistics"],["mlops"],["model deployment","deployed models","deploying models","model serving","deployed ml models"],["hugging face","huggingface"],["langchain"],["retrieval augmented generation","rag"],["prompt engineering"],["opencv"],["spark","pyspark"],["hadoop"],["javascript","js"],["kubernetes","k8s"],["react","react.js","reactjs"],["html"],["css"],["node.js","nodejs"],["django"],["flask"],["fastapi"],["spring boot"],["mongodb"],["postgresql","postgres"],["mysql"],["microservices"],["ci/cd"],["jenkins"],["terraform"],["figma"],["photoshop"],["digital marketing"],["recruitment","talent acquisition"],["payroll"],["taxation"],["auditing"],["excel","ms excel","microsoft excel","advanced excel"],["powerpoint","ms powerpoint"],["ms word","microsoft word"],["ms project","microsoft project"],["staad pro","staad.pro","staad"],["solidworks","solid works"],["autocad","auto cad"],["c++","cpp"],["c#","c sharp"],[".net","dotnet","asp.net"],["google ads","adwords"],["meta ads","facebook ads","instagram ads"],["social media marketing","smm"],["seo","search engine optimization"],["sem","search engine marketing"],["crm","customer relationship management"],["ehr","emr","electronic health records"],["bar bending schedule","bbs"],["boq","bill of quantities"],["gd&t","gdt"],["p&id","piping and instrumentation diagram"],["sap fico","sap fi"],["hrms","hris"],["training and development","l&d"],["vapt","vulnerability assessment and penetration testing"],["ui/ux","ui ux","ux/ui"],["r programming","r language"],["business development","bd"],["key account management","kam"],["accounts payable"],["accounts receivable"],["bank reconciliation","reconciliation"],["ind as","ifrs"],["gaap"],["tds"],["income tax","itr filing"],["financial analysis"],["forecasting"],["variance analysis"],["mis reporting","mis"],["statutory audit"],["internal audit"],["quickbooks"],["zoho books"],["valuation"],["equity research"],["investment banking"],["risk management"],["kyc"],["aml","anti money laundering"],["b2b sales"],["b2c sales"],["lead generation"],["cold calling"],["hubspot"],["zoho crm"],["negotiation"],["account management"],["channel sales"],["content marketing"],["email marketing"],["google analytics"],["copywriting"],["brand management"],["market research"],["campaign management"],["performance marketing"],["sourcing"],["onboarding"],["employee engagement"],["performance management"],["compensation and benefits"],["labour laws","labor laws"],["statutory compliance"],["hr operations"],["patient care"],["bls","basic life support"],["acls"],["phlebotomy"],["pharmacovigilance"],["medical coding"],["icd-10"],["clinical research"],["lesson planning"],["classroom management"],["curriculum development"],["logistics"],["inventory management"],["warehouse management"],["vendor management"],["sap mm"],["sap sd"],["demand planning"],["purchase orders","purchase order"],["import export","exim"],["customer support"],["customer service"],["zendesk"],["freshdesk"],["illustrator","adobe illustrator"],["indesign"],["canva"],["coreldraw"],["after effects"],["premiere pro"],["ui design"],["ux design"],["wireframing"],["prototyping"],["user research"],["adobe xd"],["blender"],["3ds max"],["sketchup"],["contract drafting"],["legal research"],["litigation"],["due diligence"],["data entry"],["food safety"],["front office"],["pmp"],["prince2"],["kanban"],["project planning"],["angular"],["vue","vue.js"],["next.js","nextjs"],["php"],["laravel"],["ruby on rails","rails"],["swift"],["kotlin"],["android"],["ios development"],["flutter"],["react native"],["graphql"],["redis"],["elasticsearch"],["bash","shell scripting"],["powershell"],["github"],["gitlab"],["selenium"],["cypress"],["unit testing"],["test automation","automation testing"],["manual testing"],["api testing"],["postman"],["jmeter"],["sdlc"],["oop","object oriented programming"],["data structures","dsa"],["algorithms"],["system design"],["vba"],["power query"],["looker"],["bigquery"],["snowflake"],["databricks"],["airflow"],["etl"],["data warehousing"],["data modeling","data modelling"],["a/b testing"],["ansible"],["helm"],["prometheus"],["grafana"],["devops"],["sre","site reliability"],["soc","security operations center"],["owasp"],["cissp"],["ceh"],["comptia security+","security+"],["threat hunting"],["malware analysis"],["cloud security"],["iam","identity and access management"],["pcb design"],["embedded systems","embedded c"],["microcontrollers","microcontroller"],["arduino"],["raspberry pi"],["vlsi"],["verilog"],["vhdl"],["fpga"],["power electronics"],["hvac"],["ht/lt panels","lt panels","ht panels"],["dg sets","diesel generator"],["ups"],["energy audit"],["solar pv"],["electrical maintenance"],["cable sizing"],["load calculation"],["earthing"],["lighting design"],["dialux"],["catia"],["creo"],["ansys"],["fea","finite element analysis"],["cfd"],["cnc","cnc programming"],["welding"],["sheet metal"],["injection molding","injection moulding"],["tool design"],["jigs and fixtures"],["piping"],["pipe stress","caesar ii"],["plant maintenance"],["tpm","total productive maintenance"],["5s"],["kaizen"],["iso 9001"],["apqp"],["ppap"],["fmea"],["spc","statistical process control"],["msa"],["production planning"],["mrp"],["etabs"],["revit"],["civil 3d"],["primavera","p6"],["quantity surveying"],["estimation","estimating"],["costing"],["site execution"],["structural design"],["rcc"],["surveying"],["total station"],["billing"],["road construction"],["building construction"],["qa/qc"],["process engineering"],["hysys","aspen hysys"],["aspen plus"],["gmp","good manufacturing practice"],["haccp"]];
 /* having the specific skill proves the broader one */
-const SKILL_IMPLIES = {"artificial intelligence":["machine learning","deep learning","natural language processing","computer vision","large language models","generative ai"],"generative ai":["large language models","prompt engineering","langchain","retrieval augmented generation"],"machine learning":["deep learning","tensorflow","pytorch","scikit-learn","keras"],"deep learning":["tensorflow","pytorch","keras"],"data analysis":["pandas","data science","statistics","power bi","tableau"],"cloud":["aws","azure","gcp"]};
+const SKILL_IMPLIES = {"artificial intelligence":["machine learning","deep learning","natural language processing","computer vision","large language models","generative ai"],"generative ai":["large language models","prompt engineering","langchain","retrieval augmented generation"],"machine learning":["deep learning","tensorflow","pytorch","scikit-learn","keras"],"deep learning":["tensorflow","pytorch","keras"],"data analysis":["pandas","data science","statistics","power bi","tableau","excel","sql"],"qa/qc":["quality assurance","quality control"],"quality control":["qa/qc"],"quality assurance":["qa/qc"],"cloud":["aws","azure","gcp"]};
 const SKILL_GROUPS = SKILL_PHRASES.filter(p=> !SKILL_ALIASES.some(g=> g.includes(p))).map(p=>[p]).concat(SKILL_ALIASES);
 SKILL_ALIASES.forEach(g=>{ if(!SKILL_PHRASES.includes(g[0])) SKILL_PHRASES.push(g[0]); });
 const SOFT = ["communication","leadership","teamwork","collaboration","problem solving","analytical","time management","adaptability","stakeholder management","mentoring","presentation","negotiation","coordination","ownership","attention to detail","critical thinking","customer focus","decision making","interpersonal","planning"];
@@ -783,12 +846,44 @@ function jdTitle(jd){
   if(first.length<=60 && new RegExp("\\b("+ROLE_NOUN+")\\b","i").test(first)) return first.replace(/[:\-–]+$/,'').trim();
   return null;
 }
+
+/* any job description: also pick out the tools and skills it names that are not in the lists above */
+const JD_CAPS_SKIP = new Set(['IT','HR','JD','CTC','LPA','NA','OK','USA','UK','UAE','INR','USD','THE','AND','FOR','WE','OUR','YOU','KRA','KPI','KPIS','MBA','BCA','MCA','BBA','BCOM','MCOM','ITI','PG','UG','CV','PF','ESI','ASAP','FAQ','CEO','CTO','COO','VP','AVP','MNC','PAN','NCR','WFH','WFO','EOD','TBD','ETC','NOTE','JOB','ROLE','SKILLS','ABOUT','REQUIRED','PREFERRED','RESPONSIBILITIES','REQUIREMENTS','QUALIFICATIONS','EXPERIENCE','LOCATION','SALARY','BENEFITS','DEGREE','BE','BTECH','ME','MTECH','BSC','MSC','PHD','A','I']);
+const JD_GENERIC = new Set("experience knowledge ability abilities skill skills strong good excellent great working work works understanding environment environments team teams fast-paced paced role roles etc various related relevant field fields industry industries basic advanced hands-on hands plus candidate candidates tools tool technologies technology concepts concept principles principle years year least minimum preferred required requirement requirements must should will similar other others including like such any all new latest proven solid sound deep in-depth thorough familiarity proficiency exposure background degree bachelor bachelors master masters equivalent qualification job position company clients client customers people business multiple different best practices practice standards standard processes process systems system methods methodologies methodology use using used applications application software hardware platform platforms solutions solution products product services service tasks task activities activity projects project area areas domain domains".split(' '));
+function cleanTerm(t){
+  t = t.replace(/\(.*?\)/g,' ').replace(/[“”"'`]/g,'').replace(/\s+/g,' ').trim();
+  t = t.replace(/^(?:a|an|the|both|either|strong|good|basic|advanced|hands-on|in-depth|solid|sound|working|proven|excellent|deep|thorough|at least|knowledge of|experience in|experience with|tools like|tools such as|such as|e\.g\.?|eg|including|like)\s+/i,'').replace(/\s+(?:skills?|tools?|concepts?|principles?|knowledge|experience|software|platforms?|is a plus|preferred|required|etc)\.?$/i,'').replace(/[.:;,\-–]+$/,'').trim();
+  return t;
+}
+function extractJdTerms(jd){
+  const out = new Map(), addT = (t, w)=>{ t = cleanTerm(t); const low = t.toLowerCase(); if(!t || t.length<2 || t.length>40) return;
+    const words = low.split(/\s+/); if(words.length>4) return; if(words.every(x=> JD_GENERIC.has(x) || STOPWORDS.has(x))) return;
+    if(/^\d+$/.test(low)) return; out.set(low, Math.max(out.get(low)||0, w)); };
+  const lines = jd.split(/\n/);
+  lines.forEach(line=>{
+    const letters = line.replace(/[^A-Za-z]/g,''); if(letters.length>6 && letters===letters.toUpperCase()) return;
+    (line.match(/(?<![A-Za-z0-9])(?:[A-Z][A-Za-z0-9]*[A-Z0-9][A-Za-z0-9+#&./-]*|[A-Za-z]+\+\+|[A-Za-z]+#|[A-Za-z]+\.js)(?![A-Za-z0-9])/g)||[]).forEach(tok=>{
+      const t = tok.replace(/[.\-/]+$/,''); if(JD_CAPS_SKIP.has(t.toUpperCase().replace(/[.\s]/g,''))) return; if(/^[A-Z][a-z]+$/.test(t)) return; addT(t, 2);
+    });
+  });
+  const cue = /(?:experience (?:in|with|of|on)|knowledge (?:of|in)|proficien(?:t|cy) (?:in|with)|familiar(?:ity)? with|skilled in|skills? in|expertise in|expert in|hands[- ]on (?:experience )?(?:in|with|on)|working knowledge of|understanding of|exposure to|competent in|well versed (?:in|with)|tools such as|tools like|such as)\s+([^.;\n]{3,200})/gi;
+  for(const m of jd.matchAll(cue)){
+    m[1].split(/,|\/|;|\band\b|\bor\b|\bwith\b|\bincluding\b|\blike\b|\bsuch as\b|\betc\b/i).forEach(p=> addT(p, 1));
+  }
+  return [...out.entries()].sort((a,b)=>b[1]-a[1]).map(e=>e[0]);
+}
 function matchJd(resume, jd){
   const jdLow = jd.toLowerCase(), resLow = resume.toLowerCase();
   const groups = SKILL_GROUPS.filter(g=> g.some(p=> phraseIn(p, jdLow)));
+  /* tools and skills the lists do not know yet */
+  const known = groups.flat();
+  extractJdTerms(jd).filter(t=> !known.some(k=> k===t || phraseIn(k, t) || phraseIn(t, k)) && !SOFT.some(sf=> phraseIn(sf, t)))
+    .slice(0, Math.max(0, 22 - groups.length)).forEach(t=>{ groups.push([t]); known.push(t); });
   const hard = groups.map(g=>g[0]);
+  const resStemSet = new Set(tokenize(resume).map(stem));
+  const wordsIn = p => { const ws = p.split(/\s+/).filter(w=> w.length>2 && !STOPWORDS.has(w) && !JD_GENERIC.has(w)); return ws.length>1 && ws.every(w=> resStemSet.has(stem(w))); };
   const inRes = name => { const g = SKILL_GROUPS.find(x=> x[0]===name) || [name]; return g.some(p=> phraseIn(p, resLow)); };
-  const hardHit = groups.filter(g=> g.some(p=> phraseIn(p, resLow)) || (SKILL_IMPLIES[g[0]]||[]).some(inRes)).map(g=>g[0]);
+  const hardHit = groups.filter(g=> g.some(p=> phraseIn(p, resLow) || wordsIn(p)) || (SKILL_IMPLIES[g[0]]||[]).some(inRes)).map(g=>g[0]);
   const soft = SOFT.filter(p=> phraseIn(p, jdLow));
   const softHit = soft.filter(p=> phraseIn(p, resLow));
   const covered = new Set([...groups.flat(), ...soft].join(' ').split(/[\s/]+/).map(stem));
@@ -1343,7 +1438,7 @@ function applyNumbers(){
 }
 
 /* ---------- skills finder: skills you used but did not list ---------- */
-const SKILL_GENERIC = new Set(['metro','railway','railways','safety','cloud','solar','renewable','oil and gas','lean','automation','documentation','switching','routing']);
+const SKILL_GENERIC = new Set(['sales','teaching','clinical','billing','estimation','costing','compliance','scheduling','sourcing','screening','logistics','onboarding','data entry','negotiation','forecasting','valuation','reconciliation','customer service','customer support','account management','android','swift','ups','welding','piping','mis','soc','iam','rails','helm','metro','railway','railways','safety','cloud','solar','renewable','oil and gas','lean','automation','documentation','switching','routing']);
 let skMsg = '', skUndoText = null, skJdOnly = [];
 function prettySkill(p){
   return p.split(' ').map(w=>{
@@ -2068,6 +2163,46 @@ async function exportResume(kind, skipFill){
     else { st.className='status err'; st.textContent='The download could not be completed in this view. Use "Copy resume text" instead.'; }
   }
 }
+
+
+/* ---------- reviews ---------- */
+const REVIEW_URL = AI_ON_SITE ? AI_ENDPOINT.replace(/\/+$/,'') + '/review' : '';
+(function wireReviews(){
+  const f = $('reviewForm'); if(!f || !f.addEventListener) return;
+  const st = $('rvStatus'), btn = $('rvSend');
+  if(!REVIEW_URL){
+    btn.disabled = true;
+    st.className = 'status';
+    st.innerHTML = STANDALONE ? 'Reviews open very soon. Until then, you can report a problem on <a href="https://github.com/Nikhilshankhwar/ATS-Resume-Checker/issues/new" target="_blank" rel="noopener">GitHub</a>.' : 'Reviews are collected on the public website.';
+    return;
+  }
+  f.addEventListener('submit', async e=>{
+    e.preventDefault();
+    const rating = +((f.querySelector('input[name="rating"]:checked')||{}).value || 0);
+    const msg = $('rvMsg').value.trim(), type = $('rvType').value;
+    st.className = 'status err';
+    if(!rating && msg.length < 5){ st.textContent = 'Choose a star rating or write a few words.'; return; }
+    if(type==='problem' && msg.length < 10){ st.textContent = 'Describe the problem in a sentence so it can be fixed.'; $('rvMsg').focus(); return; }
+    const em = $('rvEmail').value.trim();
+    if(em && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)){ st.textContent = 'That email address does not look right. Fix it or leave it empty.'; return; }
+    let tech = null;
+    if($('rvTech').checked){
+      const sc = document.querySelector('#resultsPanel .gauge-num .n');
+      tech = {browser: navigator.userAgent.slice(0,200), screen: `${window.innerWidth}x${window.innerHeight}`, file: fileInfo ? fileInfo.kind : (resumeEl.value.trim() ? 'pasted text' : 'none'), pages: pdfInfo ? pdfInfo.pages : null, score: sc ? sc.textContent : null, jobDescription: jdEl.value.trim() ? 'yes' : 'no', template: tplId};
+    }
+    btn.disabled = true; st.className = 'status'; st.textContent = 'Sending...';
+    try{
+      const r = await fetch(REVIEW_URL, {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({rating, type, message: msg, name: $('rvName').value.trim(), email: em, website: $('rvWebsite').value, tech})});
+      let d = null; try{ d = await r.json(); }catch(err){}
+      if(!r.ok) throw new Error((d && d.error) || 'Your review could not be sent.');
+      st.className = 'status ok'; st.textContent = 'Thank you! Your review was sent.';
+      f.reset(); $('rvTech').checked = true;
+    }catch(err){
+      st.className = 'status err'; st.textContent = (err && err.message && !/fetch/i.test(err.message)) ? err.message : 'Your review could not be sent. Check your internet and try again.';
+    }
+    btn.disabled = false;
+  });
+})();
 
 /* show a report straight away when a draft was restored */
 syncEditor(); renderRack();
