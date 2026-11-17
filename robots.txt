@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://nikhilshankhwar.github.io/ATS-Resume-Checker/sitemap.xml
