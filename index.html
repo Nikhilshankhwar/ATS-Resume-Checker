@@ -688,6 +688,7 @@ function isHeading(t, strict){
 }
 function keyOf(h){
   h = h.toLowerCase();
+  if(/skill|competenc|expertise/.test(h)) return 'skills';
   if(/summary|profile|objective/.test(h)) return 'summary';
   if(/skill|competenc|expertise/.test(h)) return 'skills';
   if(/experience|employment|work history|internship/.test(h)) return 'experience';
@@ -1109,6 +1110,47 @@ function runSat(){
 }
 
 /* ---------- reading files ---------- */
+/* PDF text comes out one printed line at a time. Rebuild real paragraphs and bullets:
+   a wrapped line is joined to the line above it, and any bullet glyph becomes "• ". */
+const PDF_BULLET = /^[\u2022\u25CF\u25AA\u25A0\u25E6\u25CB\u2023\u2043\u2219\u00B7\u25BA\u25B8\u27A2\u2713\u2714\u2756\u2666\u25C6\u2192\u00A7\u0095\uF0A7\uF0B7\uF0D8\uF076\uF0FC\uF0A8\uF06E\uF0E0\uF0D3\uF0BE\uF09F\uF0F0*]\s*|^[-\u2013\u2014o]\s+(?=\S)/;
+function joinLines(lines){
+  if(!lines.length) return '';
+  const info = lines.map(L=>{
+    const first = L.items[0], last = L.items[L.items.length-1];
+    let text = L.items.map((it,i)=>{ if(!i) return it.s; const pr=L.items[i-1]; return ((it.x-(pr.x+pr.w)) > Math.max(1, pr.h*0.18) ? ' ' : '') + it.s; }).join('').replace(/\s+/g,' ').trim();
+    let bullet = false;
+    if(PDF_BULLET.test(text) || /^[\uE000-\uF8FF]/.test(text)){ bullet = true; text = text.replace(PDF_BULLET,'').replace(/^[\uE000-\uF8FF]\s*/,'').trim(); }
+    return {x:first.x, right:last.x+last.w, y:L.y, h:Math.max(...L.items.map(it=>it.h||10)), text, bullet};
+  }).filter(o=>o.text);
+  if(!info.length) return '';
+  const rights = info.map(o=>o.right).sort((a,b)=>a-b), pageRight = rights[Math.floor(rights.length*0.95)] || rights[rights.length-1];
+  const xs = info.map(o=>Math.round(o.x)), cnt = {}; xs.forEach(x=>{ cnt[x]=(cnt[x]||0)+1; });
+  const baseX = Math.min(...xs.filter(x=> cnt[x] >= 2).concat([Math.min(...xs)]));
+  const width = Math.max(50, pageRight - baseX);
+  const gaps = []; for(let i=1;i<info.length;i++){ const g = info[i-1].y-info[i].y; if(g>0) gaps.push(g); }
+  gaps.sort((a,b)=>a-b); const usualGap = gaps.length ? gaps[Math.floor(gaps.length/2)] : 14;
+  const anyBullet = info.some(o=>o.bullet);
+  const out = [];
+  info.forEach((cur,i)=>{
+    const prev = i ? info[i-1] : null, last = out[out.length-1];
+    const filled = prev && prev.right >= pageRight - width*0.12;
+    const gapOk = prev && (prev.y - cur.y) > 0 && (prev.y - cur.y) <= Math.max(usualGap*1.35, prev.h*1.6);
+    const sameSize = prev && Math.abs(cur.h - prev.h) <= Math.max(1.2, prev.h*0.18);
+    const isLabel = /^[A-Z][\w &/().+-]{1,32}:\s/.test(cur.text) && !/[,&/(\-–]$/.test(prev ? prev.text : '');
+    const joinable = last && filled && gapOk && sameSize && !cur.bullet && !isLabel && !last.head
+      && !isHeading(cur.text, false) && !(DATE_RE.test(cur.text) && cur.text.length < 60) && cur.x >= baseX - 3
+      && !(!anyBullet && cur.x > baseX + 6 && /[.;!]$/.test(prev.text) && /^[A-Z]/.test(cur.text));
+    if(joinable){
+      last.text = /[A-Za-z0-9]-$/.test(last.text) && /^[a-z0-9]/.test(cur.text) ? last.text + cur.text : last.text + ' ' + cur.text;
+      return;
+    }
+    let bullet = cur.bullet;
+    /* bullets drawn as shapes leave no glyph: an indented line that starts a sentence is a list item */
+    if(!anyBullet && !bullet && cur.x > baseX + 6 && /^[A-Z]/.test(cur.text) && cur.text.length > 25 && !DATE_RE.test(cur.text) && !isHeading(cur.text, false)) bullet = true;
+    out.push({text: cur.text, bullet, head: isHeading(cur.text, false) && !bullet});
+  });
+  return out.map(o=> (o.bullet ? '• ' : '') + o.text).join('\n');
+}
 async function readPdf(file){
   if(!window.pdfjsLib) throw new Error('nopdf');
   const doc = await pdfjsLib.getDocument({data: await file.arrayBuffer()}).promise;
@@ -1118,7 +1160,7 @@ async function readPdf(file){
     const page = await doc.getPage(p);
     const vw = page.getViewport({scale:1}).width;
     const content = await page.getTextContent();
-    const items = content.items.filter(it=>it.str && it.str.trim()).map(it=>({x:it.transform[4], y:it.transform[5], w:it.width||0, h:it.height||10, s:it.str, f:it.fontName}));
+    const items = content.items.filter(it=>it.str && (it.str.trim() || /[^\s]/.test(it.str))).map(it=>({x:it.transform[4], y:it.transform[5], w:it.width||0, h:it.height||10, s:it.str, f:it.fontName}));
     items.forEach(it=>{ if(it.f) fonts.add(it.f); chars += it.s.length; });
     const toLines = arr => {
       const sorted = arr.slice().sort((a,b)=> (b.y-a.y) || (a.x-b.x)); const lines=[];
@@ -1141,8 +1183,8 @@ async function readPdf(file){
     });
     if(gutters.length>=8 && gutters.length/Math.max(lines.length,1) > 0.28){
       gutters.sort((a,b)=>a-b); const g = gutters[Math.floor(gutters.length/2)];
-      full += toLines(items.filter(it=>it.x<g)).map(lineText).join('\n') + '\n' + toLines(items.filter(it=>it.x>=g)).map(lineText).join('\n') + '\n\n';
-    } else full += lines.map(lineText).join('\n') + '\n\n';
+      full += joinLines(toLines(items.filter(it=>it.x<g))) + '\n' + joinLines(toLines(items.filter(it=>it.x>=g))) + '\n\n';
+    } else full += joinLines(lines) + '\n\n';
   }
   return {text: full.trim(), doc, info:{pages:doc.numPages, fonts:fonts.size, chars, multiCol: colLines>=8 && colLines/Math.max(totalLines,1) > 0.2}};
 }
@@ -1179,8 +1221,22 @@ async function handleFile(file){
       setStatus(`Read ${file.name}: ${out.info.pages} page${out.info.pages>1?'s':''}. Your report is below.`, 'ok');
     }else if(name.endsWith('.docx')){
       if(!window.mammoth) throw new Error('nodocx');
-      const res = await mammoth.extractRawText({arrayBuffer: await file.arrayBuffer()});
-      const text = (res.value||'').replace(/\n{3,}/g,'\n\n').trim(); if(text.length<40) throw new Error('empty');
+      const buf = await file.arrayBuffer();
+      let text = '';
+      try{
+        const res = await mammoth.convertToHtml({arrayBuffer: buf});
+        const doc = new DOMParser().parseFromString(res.value||'', 'text/html'), out = [];
+        doc.body.querySelectorAll('p,h1,h2,h3,h4,h5,h6,li,tr').forEach(el=>{
+          if(el.closest('li') && el.tagName!=='LI') return;
+          if(el.tagName==='P' && el.closest('td')) return;
+          let t = (el.tagName==='LI' ? [...el.childNodes].filter(n=> !(n.nodeType===1 && /^(UL|OL)$/.test(n.tagName))).map(n=>n.textContent).join(' ') : el.tagName==='TR' ? [...el.children].map(c=>c.textContent.trim()).filter(Boolean).join(' | ') : el.textContent).replace(/\s+/g,' ').trim();
+          if(!t) return;
+          out.push((el.tagName==='LI' && !BUL.test(t) ? '• ' : '') + t);
+        });
+        text = out.join('\n');
+      }catch(e){}
+      if(text.length < 40){ const res = await mammoth.extractRawText({arrayBuffer: buf}); text = (res.value||'').replace(/\n{3,}/g,'\n\n').trim(); }
+      if(text.length<40) throw new Error('empty');
       noFile(); fileInfo = {name:file.name, size:file.size, kind:'docx'};
       resumeEl.value = text; saveDraft(); setStatus(`Read ${file.name}. Your report is below.`, 'ok');
     }else if(name.endsWith('.txt') || file.type==='text/plain'){
