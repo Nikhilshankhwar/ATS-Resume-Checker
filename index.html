@@ -1222,7 +1222,7 @@ function runSat(){
     ${skillsPanelHtml(!!R.J)}
     <div class="panel" data-needs="ai" hidden>
       <h3>AI upgrade</h3>
-      <p class="hint" style="margin:0 0 10px;">Sends your resume text${R.J?' and the job description':''} to ${AI_VIA} when you click. It changes wording only. It will not invent numbers, tools or experience, and it marks gaps as <code>[X]</code> for you to fill in.</p>
+      <p class="hint" style="margin:0 0 10px;">Sends your resume text${R.J?' and the job description':''} to ${AI_VIA} when you click. It changes wording only. It will not invent numbers, tools, results or experience.</p>
       <div class="row"><button id="aiUpgrade" class="btn primary sm" type="button">Upgrade entire resume</button><button id="aiRewrite" class="btn sm" type="button">Rewrite weak bullets only</button>${R.J?'<button id="aiTailor" class="btn sm" type="button">Tailor to this job</button>':''}</div>
       <div class="status" id="aiStatus" aria-live="polite" style="margin-top:10px;"></div><div id="aiOut"></div>
     </div>
@@ -1539,6 +1539,23 @@ function aiFail(err){
   st.textContent = code==='not_granted' ? 'AI upgrade was not allowed for this page.' : code==='rate_limited' ? 'The AI usage limit is reached for now. Try again later.' : code==='cancelled' ? 'Cancelled.' : 'AI upgrade could not finish. Try again.';
 }
 function aiBtns(dis){ ['aiUpgrade','aiRewrite','aiTailor','aiSkills'].forEach(id=>{ const b=$(id); if(b) b.disabled=dis; }); }
+/* AI sometimes still adds made-up results with blanks like "[X%]": drop that whole clause */
+function dropAiBlanks(t){
+  const B = '\\[[^\\]\\n]{0,40}\\]';
+  return String(t).split('\n').map(line=>{
+    if(!/\[[^\]\n]{0,40}\]/.test(line)) return line;
+    let l = line;
+    /* a made-up result clause: "..., achieving [X%] accuracy" / "and improving uptime by [X%]" */
+    l = l.replace(new RegExp('(,|;|\\s+-|\\s+–)?\\s+(and\\s+|while\\s+|thereby\\s+)?(resulting in|leading to|achieving|improving|increasing|reducing|cutting|boosting|saving|ensuring|enhancing|delivering)\\b[^,.;\\n]*?'+B+'[^,.;\\n]*','gi'), '');
+    /* a blank after a small word: "by [X%]", "at [N sites]" */
+    l = l.replace(new RegExp('\\s+(by|at|to|for|across|within|in|over|of up to|up to|around|about|nearly)\\s+'+B,'gi'), '');
+    /* anything left: drop just the blank */
+    l = l.replace(new RegExp('\\s*'+B,'g'), '');
+    l = l.replace(/\s+([,.;])/g,'$1').replace(/,\s*([.;]|$)/g,'$1').replace(/\s{2,}/g,' ').replace(/\s+$/,'');
+    if(/[a-z0-9)]$/i.test(l) && /[.]$/.test(line.trim())) l += '.';
+    return l;
+  }).join('\n');
+}
 async function aiRewrite(){
   if(!aiCap || aiBusy || !lastRun) return;
   const targets = lastRun.bullets.filter(b=> !STRONG_VERBS.includes(firstWord(b)) || !hasNumber(b) || WEAK.some(w=>b.toLowerCase().includes(w)) || stripBul(b).split(/\s+/).length>26 || grammarFix(b)!==b).slice(0,10);
@@ -1550,7 +1567,7 @@ async function aiRewrite(){
 Rules:
 - Start with a strong past-tense action verb. No first-person pronouns.
 - Keep every fact, tool, protocol and number exactly as given. Do NOT invent metrics, tools, employers or results.
-- If a bullet has no measurable result, add a placeholder like [X%] or [N sites] where a real number would fit.
+- Never add placeholders or square brackets such as [X%] or [N]. Never add a result, percentage or outcome that is not in the original bullet; if there is no number, write the bullet without one.
 - One line each, under 24 words; cut filler words and keep only the main achievement. No bullet character at the start.
 - Correct every grammar, spelling, tense and punctuation mistake.
 ${lastRun.jd ? `- Where truthful, prefer wording used in this job description:\n"""${lastRun.jd.slice(0,2500)}"""\n` : ''}
@@ -1560,7 +1577,7 @@ ${targets.map((b,i)=>`${i}. ${stripBul(b)}`).join('\n')}
 Return only JSON: {"rewrites":[{"i":0,"text":"..."}]}`;
   try{
     const res = await aiCap.json(prompt, {modelTier:'default'});
-    const list = (res && Array.isArray(res.rewrites) ? res.rewrites : []).filter(x=> targets[x.i] && typeof x.text==='string' && x.text.trim());
+    const list = (res && Array.isArray(res.rewrites) ? res.rewrites : []).filter(x=> targets[x.i] && typeof x.text==='string' && x.text.trim()).map(x=> ({...x, text: dropAiBlanks(x.text.trim())})).filter(x=> x.text.trim());
     if(!list.length) throw new Error('empty');
     st.textContent = `${list.length} rewrite${list.length>1?'s':''} ready. Apply the ones you like, then check again.`;
     out.innerHTML = list.map((x,k)=>`<div class="ai-box"><span class="quote" style="margin-top:0;">${esc(targets[x.i])}</span><span class="ai-new">${esc(x.text.trim())}</span><button class="btn sm" style="margin-top:9px;" type="button" data-ai="${k}">Apply rewrite</button></div>`).join('')
@@ -1621,7 +1638,7 @@ async function aiUpgrade(){
 
 Hard rules:
 - Use ONLY facts that are in the resume. Never invent employers, dates, tools, certifications, degrees or numbers.
-- Where a bullet has no measurable result, insert a placeholder such as [X%] or [N sites] for the person to fill in.
+- Never add placeholders or square brackets such as [X%] or [N]. Never add a result, percentage or outcome that the resume does not state; if a bullet has no number, write it without one.
 - Every achievement bullet starts with a strong past-tense action verb. No first-person pronouns. Under 30 words each.
 - Use one date format throughout (e.g. Aug 2024 – Present).
 - Correct every grammar, spelling, tense and punctuation mistake.
@@ -1641,7 +1658,7 @@ RESUME:
 ${lastRun.jd ? `\nJOB DESCRIPTION:\n"""${lastRun.jd.slice(0,3500)}"""` : ''}`;
   try{
     const res = await aiCap(prompt, {modelTier:'default', cache:false, onText:({text})=>{ const pv=$('aiPreview'); if(pv) pv.textContent = text; }});
-    const finalText = (res.text||'').replace(/^```[a-z]*\n?/i,'').replace(/\n?```\s*$/,'').trim();
+    const finalText = dropAiBlanks((res.text||'').replace(/^```[a-z]*\n?/i,'').replace(/\n?```\s*$/,'').trim());
     if(finalText.length < 80) throw new Error('empty');
     $('aiPreview').textContent = finalText;
     st.textContent = res.truncated ? 'Preview ready, but the answer was cut short. Check the end before using it.' : 'Preview ready. Check every fact, then use it.';
@@ -1649,7 +1666,7 @@ ${lastRun.jd ? `\nJOB DESCRIPTION:\n"""${lastRun.jd.slice(0,3500)}"""` : ''}`;
     $('aiUse').onclick = ()=>{
       undoText = resumeEl.value; resumeEl.value = finalText; saveDraft(); $('textWrap').open = true; runSat();
       const s2 = $('aiStatus');
-      if(s2){ s2.className='status ok'; s2.innerHTML = 'The upgraded version is now your working text and has been rescored. Fill any [placeholders], then choose a template and download. <button class="btn sm" type="button" id="aiUndo2">Undo upgrade</button>';
+      if(s2){ s2.className='status ok'; s2.innerHTML = 'The upgraded version is now your working text and has been rescored. Check it, then choose a template and download. <button class="btn sm" type="button" id="aiUndo2">Undo upgrade</button>';
         $('aiUndo2').onclick = (ev)=>{ ev.stopPropagation(); if(undoText!==null){ resumeEl.value = undoText; undoText=null; saveDraft(); runSat(); } }; }
     };
   }catch(err){ aiFail(err); if(err && err.text && $('aiPreview')) $('aiPreview').textContent = err.text; }
