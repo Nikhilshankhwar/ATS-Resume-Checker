@@ -709,7 +709,125 @@ $('clearBtn').addEventListener('click', ()=>{
   emptyResults('No resume loaded yet','Upload a file at the top of the page, paste your text on the left, or try the sample resume.');
   $('topReadout').innerHTML = 'STATUS: <b>AWAITING INPUT</b>'; $('statusDot').style.background='var(--warn)';
 });
-const SAMPLE = `Aarav Mehta (sample)
+const SAMPLES = [
+{ text:`Aarav Mehta (sample)
+Software Developer
+aarav.mehta@example.com | +91 98765 43210 | Bengaluru, India | linkedin.com/in/aarav-mehta-sample
+
+SUMMARY
+Software developer with 3 years of experience building web applications and REST APIs in Node.js and React.
+
+EXPERIENCE
+Software Developer, Brightloop Technologies Pvt Ltd — Jul 2022 – Present
+• Built 12 REST APIs in Node.js and MongoDB used by 50,000 monthly users
+• Responsible for bug fixing and code reviews in the team
+• Worked on database performance issues in the reporting module
+• Cut average page load time from 4s to 1.8s by adding caching and lazy loading
+• Helped with deployment scripts and documentation for the managment team
+
+EDUCATION
+B.Tech, Computer Science, State Technical University — 2018 – 2022
+
+SKILLS
+JavaScript, Node.js, React, MongoDB, SQL, Git, REST APIs, Docker`,
+  jd:'Job title: Software Developer\nWe are hiring a Software Developer to build and maintain web applications. Required: JavaScript, Node.js, React, REST APIs, MongoDB or SQL, Git, unit testing, code reviews, debugging. Docker, AWS and CI/CD knowledge preferred. Good communication and teamwork with product and design teams.',
+  extra:`
+
+PROJECTS
+Order Tracking Dashboard, Brightloop — Jan 2023 – Jun 2023
+• Built a live order dashboard in React that cut support calls by 25%
+• Added automated tests that raised coverage from 40% to 78%
+
+CERTIFICATIONS
+AWS Cloud Practitioner — 2023` },
+{ text:`Meera Nair (sample)
+Digital Marketing Executive
+meera.nair@example.com | +91 98765 11223 | Mumbai, India | linkedin.com/in/meera-nair-sample
+
+SUMMARY
+Digital marketer with 3 years of experience in social media, SEO and paid campaigns for consumer brands.
+
+EXPERIENCE
+Digital Marketing Executive, Pixelwave Media — Jun 2022 – Present
+• Grew Instagram followers from 3K to 18K in 5 months for a fashion client
+• Responsible for weekly social media posts and email newsletters
+• Worked on Google Ads campaigns for 6 clients
+• Lifted campaign click-through rate by 42% by testing new ad copy
+• Helped with monthly reports for the managment team
+
+EDUCATION
+BBA, Marketing, City University — 2019 – 2022
+
+SKILLS
+SEO, Google Ads, Meta Ads, Google Analytics, Canva, Content Writing, Email Marketing`,
+  jd:'Job title: Digital Marketing Executive\nWe are hiring a Digital Marketing Executive to run social media, SEO and paid campaigns. Required: SEO, Google Ads, Meta Ads, Google Analytics, content writing, email marketing, campaign reporting. Canva and A/B testing preferred. Strong communication and teamwork.',
+  extra:`
+
+PROJECTS
+Festive Sale Campaign, Pixelwave — Oct 2023
+• Planned a 3-week campaign that brought 2,400 new leads at 30% lower cost per lead
+
+CERTIFICATIONS
+Google Analytics Certification — 2023` },
+{ text:`Rohan Verma (sample)
+Accounts Executive
+rohan.verma@example.com | +91 98765 33445 | Delhi, India | linkedin.com/in/rohan-verma-sample
+
+SUMMARY
+Accounts professional with 4 years of experience in bookkeeping, GST filing and month-end reporting.
+
+EXPERIENCE
+Accounts Executive, Kapoor Traders Pvt Ltd — Apr 2021 – Present
+• Processed 400+ invoices a month in Tally with 99.8% accuracy
+• Responsible for GST returns and TDS filing
+• Worked on bank reconciliation and vendor payments
+• Cut month-end close time by 2 days by standardizing checklists
+• Helped with audit documents for the managment team
+
+EDUCATION
+B.Com, Accounting, City University — 2017 – 2020
+
+SKILLS
+Tally Prime, GST, TDS, Bank Reconciliation, MS Excel, Accounts Payable, Financial Reporting`,
+  jd:'Job title: Accounts Executive\nWe are hiring an Accounts Executive for our finance team. Required: Tally, GST and TDS filing, bank reconciliation, accounts payable and receivable, MS Excel, month-end closing, audit support. SAP knowledge preferred. Attention to detail and teamwork.',
+  extra:`
+
+PROJECTS
+Vendor Payment Cleanup, Kapoor Traders — 2023
+• Reviewed 180 vendor accounts and recovered Rs 6 lakh in duplicate payments
+
+CERTIFICATIONS
+Advanced Excel, Finance Institute — 2022` },
+{ text:`Karan Singh (sample)
+Mechanical Engineer
+karan.singh@example.com | +91 98765 55667 | Pune, India | linkedin.com/in/karan-singh-sample
+
+SUMMARY
+Mechanical engineer with 3 years of experience in CNC production, preventive maintenance and quality control.
+
+EXPERIENCE
+Production Engineer, Steelforge Industries — Jul 2022 – Present
+• Reduced machine downtime by 18% across 3 CNC lines with weekly preventive maintenance
+• Responsible for production planning and shift reports
+• Worked on quality issues in the machining section
+• Cut rejection rate from 4.5% to 2.8% by introducing in-process checks
+• Helped with ISO documents for the managment team
+
+EDUCATION
+B.E., Mechanical Engineering, State Technical University — 2018 – 2022
+
+SKILLS
+CNC Machining, AutoCAD, SolidWorks, Preventive Maintenance, Six Sigma, Quality Control, MS Excel`,
+  jd:'Job title: Production Engineer\nWe are hiring a Production Engineer for our machining plant. Required: CNC machining, production planning, preventive maintenance, quality control, root cause analysis, AutoCAD or SolidWorks, ISO documentation. Six Sigma and lean knowledge preferred. Teamwork and shop floor coordination.',
+  extra:`
+
+PROJECTS
+Tool Life Improvement, Steelforge — 2023
+• Raised average tool life by 22% by changing cutting parameters on 2 lines
+
+CERTIFICATIONS
+Six Sigma Green Belt — 2023` },
+{ text:`Aarav Mehta (sample)
 SCADA and Automation Engineer
 aarav.mehta@example.com | +91 98765 43210 | Pune, India | linkedin.com/in/aarav-mehta-sample
 
@@ -728,10 +846,24 @@ EDUCATION
 B.Tech, Electrical Engineering, State Technical University — 2018 – 2022
 
 SKILLS
-SCADA, RTU, PLC, IEC 60870-5-104, Modbus, AutoCAD Electrical, MS Excel`;
+SCADA, RTU, PLC, IEC 60870-5-104, Modbus, AutoCAD Electrical, MS Excel`,
+  jd:'Job title: SCADA Engineer\nWe are hiring a SCADA Engineer for substation automation projects. Required: SCADA, RTU, PLC programming, IEC 61850, IEC 60870-5-104, Modbus, testing and commissioning, troubleshooting, FAT and SAT, technical documentation. Python scripting and network security knowledge preferred. Good communication and teamwork with client coordination.',
+  extra:`
+
+PROJECTS
+Metro Line RSS SCADA, City Metro — Jan 2023 – Dec 2023
+• Delivered 66 kV and 25 kV IO lists for 6 substations and closed all punch points
+• Cut site rework by 20% with a standard point-to-point test sheet
+
+CERTIFICATIONS
+PLC Programming, Automation Institute — 2023` }
+];
+let sampleIdx = 0, lastSampleJd = '';
+const SAMPLE = SAMPLES[0].text;
 $('sampleBtn').addEventListener('click', ()=>{
-  resumeEl.value = SAMPLE; noFile();
-  if(!jdEl.value.trim()) jdEl.value = 'Job title: SCADA Engineer\nWe are hiring a SCADA Engineer for substation automation projects. Required: SCADA, RTU, PLC programming, IEC 61850, IEC 60870-5-104, Modbus, testing and commissioning, troubleshooting, FAT and SAT, technical documentation. Python scripting and network security knowledge preferred. Good communication and teamwork with client coordination.';
+  const sm = SAMPLES[sampleIdx % SAMPLES.length]; sampleIdx++;
+  resumeEl.value = sm.text; noFile();
+  if(!jdEl.value.trim() || jdEl.value === lastSampleJd){ jdEl.value = sm.jd; lastSampleJd = sm.jd; }
   saveDraft(); setStatus('Sample resume loaded. It is fictional.', 'ok'); runSat(); toBench();
 });
 
@@ -1704,15 +1836,7 @@ const TEMPLATES = [
 let tplId = store.get('rsat_tpl') || 'corporate';
 const baseTpl = () => TEMPLATES.find(t=>t.id===tplId) || TEMPLATES[0];
 const curTpl = () => { const t = baseTpl(); return Object.assign({}, t, {face: FONTS[userFace] ? userFace : faceOf(t), kx: sizeK}); };
-const PREVIEW_SAMPLE = SAMPLE.replace(' (sample)','').replace('managment','management') + `
-
-PROJECTS
-Metro Line RSS SCADA, City Metro — Jan 2023 – Dec 2023
-• Delivered 66 kV and 25 kV IO lists for 6 substations and closed all punch points
-• Cut site rework by 20% with a standard point-to-point test sheet
-
-CERTIFICATIONS
-PLC Programming, Automation Institute — 2023`;
+const PREVIEW_SAMPLE = SAMPLES[0].text.replace(' (sample)','').replace('managment','management') + SAMPLES[0].extra;
 
 /* ---------- text -> blocks -> template ---------- */
 function textToBlocks(text){
