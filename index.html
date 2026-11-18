@@ -437,10 +437,10 @@ code{font-family:var(--mono);background:var(--card2);border:1px solid var(--line
     <label class="drop" id="drop" for="resumeFile">
       <span class="ic" aria-hidden="true">↑</span>
       <b>Drop your resume here or choose a file</b>
-      <small>PDF or DOCX is best · TXT also works · up to 8 MB</small>
+      <small>PDF or DOCX is best · TXT or a photo also works · up to 8 MB</small>
       <span class="btn primary lg fake">Upload your resume</span>
     </label>
-    <input class="vh" type="file" id="resumeFile" accept=".pdf,.docx,.txt,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain">
+    <input class="vh" type="file" id="resumeFile" accept=".pdf,.docx,.txt,.jpg,.jpeg,.png,.webp,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain,image/jpeg,image/png,image/webp">
     <div class="status" id="uploadStatus" aria-live="polite"></div>
     <div class="hero-fine"><span>Checked in your browser, not uploaded to a server</span><span>No sign-up for scoring and templates</span><button type="button" id="sampleBtn">Try it with a sample resume</button><a href="#guide" style="color:var(--hero-ink);">New here? See the 6 steps</a></div>
   </div>
@@ -1168,6 +1168,7 @@ function analyse(resume, jd){
   if(fileInfo){
     const mb = fileInfo.size/1048576, sizeTxt = mb>=1 ? mb.toFixed(1)+' MB' : Math.max(1,Math.round(fileInfo.size/1024))+' KB';
     const okType = fileInfo.kind==='pdf' || fileInfo.kind==='docx';
+    if(fileInfo.scanned) add('ats','Text layer', 0, fileInfo.kind==='image' ? 'You uploaded a photo. An ATS cannot read photos at all. Download the text below in one of our templates to get a PDF or Word file it can read.' : 'Your PDF is a picture of text (a scan or image export), so an ATS reads it as a blank page. We used OCR to read it. Download it in one of our templates to get a text PDF.', {w:4});
     add('ats','File type and size', (okType?100:70) - (mb>2?40:0), `${fileInfo.kind.toUpperCase()} file, ${sizeTxt}. ` + (mb>2 ? 'Many job portals reject files over 2 MB, so compress it.' : okType ? 'Both are accepted by job portals.' : 'Submit as PDF or DOCX, which every portal accepts.'), {w:.6});
   } else add('ats','File type and size', 0, 'Not checked because you pasted text. Upload the actual file to test it.', {na:true});
   const weird = (resume.match(new RegExp('['+String.fromCharCode(0xFFFD)+'\\uE000-\\uF8FF\\x00-\\x08]','g'))||[]).length;
@@ -1291,6 +1292,7 @@ function analyse(resume, jd){
     const cap = fit<20 ? 35 : fit<35 ? 48 : fit<50 ? 60 : fit<65 ? 74 : 100;
     if(total > cap){ total = cap; capped = true; }
   }
+  if(fileInfo && fileInfo.scanned && total > 40){ total = 40; capped = true; }
   return {total, cats, checks, J, bullets, fit, capped};
 }
 
@@ -1302,7 +1304,8 @@ function runSat(){
   if(resume.length < 40){ emptyResults('Nothing to check yet','Upload a resume file or paste at least a few lines of text, then check again.'); return; }
   const R = analyse(resume, jd), total = R.total;
   let word, color;
-  if(R.J && R.fit<50){ word="LOW JOB MATCH"; color="var(--bad)"; }
+  if(fileInfo && fileInfo.scanned){ word="IMAGE FILE"; color="var(--bad)"; }
+  else if(R.J && R.fit<50){ word="LOW JOB MATCH"; color="var(--bad)"; }
   else if(total>=80){ word="COMMISSIONED"; color="var(--good)"; } else if(total>=60){ word="CONDITIONAL PASS"; color="var(--warn)"; } else { word="FAULT DETECTED"; color="var(--bad)"; }
   $('statusDot').style.background = color;
   $('topReadout').innerHTML = `STATUS: <b style="color:${color}">${word}</b>`;
@@ -1481,6 +1484,56 @@ async function renderPdfPage(){
 }
 $('vPrev').addEventListener('click', ()=>{ if(pdfDoc && pdfPage>1){ pdfPage--; renderPdfPage(); } });
 $('vNext').addEventListener('click', ()=>{ if(pdfDoc && pdfPage<pdfDoc.numPages){ pdfPage++; renderPdfPage(); } });
+/* ---------- OCR for scanned PDFs and photos (loaded only when needed) ---------- */
+let ocrLib = null;
+function loadOcr(){
+  if(ocrLib) return ocrLib;
+  ocrLib = new Promise((res, rej)=>{
+    if(window.Tesseract) return res(window.Tesseract);
+    const sc = document.createElement('script');
+    sc.src = 'https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js';
+    sc.onload = ()=> window.Tesseract ? res(window.Tesseract) : rej(new Error('ocrload'));
+    sc.onerror = ()=>{ ocrLib = null; rej(new Error('ocrload')); };
+    document.head.appendChild(sc);
+  });
+  return ocrLib;
+}
+function cleanOcr(t){
+  return String(t).split('\n').map(l=> l.replace(/\s+$/,'')
+      .replace(/^\s*(?:[eo°«»•·*>~=]|\(\s?\)|0|©|®)\s+(?=[A-Z0-9(])/, '• ')
+      .replace(/[|]{1,2}\s*$/,'').replace(/\s{2,}/g,' '))
+    .join('\n').replace(/\n{3,}/g,'\n\n').trim();
+}
+async function ocrImages(sources, onProgress){
+  const T = await loadOcr();
+  const worker = await T.createWorker('eng', 1, { logger: m=>{ if(m.status==='recognizing text' && onProgress) onProgress(m.progress); } });
+  let out = '';
+  try{
+    for(let i=0;i<sources.length;i++){
+      if(onProgress) onProgress(0, i+1, sources.length);
+      const r = await worker.recognize(sources[i]);
+      out += (r && r.data && r.data.text ? r.data.text : '') + '\n\n';
+    }
+  } finally { try{ await worker.terminate(); }catch(e){} }
+  return cleanOcr(out);
+}
+async function pdfToCanvases(doc, maxPages){
+  const list = [];
+  for(let i=1;i<=Math.min(doc.numPages, maxPages);i++){
+    const page = await doc.getPage(i), base = page.getViewport({scale:1});
+    const vp = page.getViewport({scale: Math.min(2.5, 1700/base.width)});
+    const cv = document.createElement('canvas'); cv.width = vp.width; cv.height = vp.height;
+    const ctx = cv.getContext('2d'); ctx.fillStyle = '#fff'; ctx.fillRect(0,0,cv.width,cv.height);
+    await page.render({canvasContext: ctx, viewport: vp}).promise;
+    list.push(cv);
+  }
+  return list;
+}
+function ocrStatus(label){
+  let page = 1, pages = 1;
+  return (p, pg, pgs)=>{ if(pg){ page = pg; pages = pgs; }
+    setStatus(`${label}${pages>1?` (page ${page} of ${pages})`:''}: ${Math.round((p||0)*100)}%. This takes 10 to 30 seconds the first time.`); };
+}
 async function handleFile(file){
   if(!file) return;
   const name = file.name.toLowerCase();
@@ -1492,8 +1545,17 @@ async function handleFile(file){
       pdfDoc = out.doc; pdfPage = 1; $('viewer').hidden = false; $('vName').textContent = file.name; renderPdfPage();
       if(out.info.chars < 150){
         pdfInfo=null; fileInfo=null;
-        setStatus('This PDF has no readable text layer. It is probably a scan or an image export, so an ATS cannot read it either. Export it again from Word or Google Docs as a text PDF.', 'err');
-        emptyResults('This PDF cannot be read by an ATS','It contains images of text, not text. Export it again as a text PDF, or upload the Word version.'); toBench(); return;
+        let text = '';
+        try{ text = await ocrImages(await pdfToCanvases(out.doc, 3), ocrStatus('This PDF is an image, so we are reading it with OCR')); }catch(e){ text = ''; try{ console.warn('ocr failed', e && e.message); }catch(_){} }
+        if(text.replace(/\s/g,'').length < 80){
+          setStatus('This PDF has no readable text layer. It is probably a scan or an image export, so an ATS cannot read it either. Export it again from Word or Google Docs as a text PDF.', 'err');
+          emptyResults('This PDF cannot be read by an ATS','It contains images of text, not text. Export it again as a text PDF, or upload the Word version.'); toBench(); return;
+        }
+        fileInfo = {name:file.name, size:file.size, kind:'pdf', scanned:true};
+        resumeEl.value = text; saveDraft();
+        $('textWrap').open = true; $('textSummary').textContent = 'Text read by OCR: check it for mistakes';
+        setStatus('Your PDF is an image, so a real ATS would see a blank page. We read it with OCR so you can still fix it: check the text below, then download it in a template to get a file an ATS can read.', 'err');
+        runSat(); toBench(); return;
       }
       pdfInfo = out.info; fileInfo = {name:file.name, size:file.size, kind:'pdf'};
       resumeEl.value = out.text; saveDraft();
@@ -1519,6 +1581,13 @@ async function handleFile(file){
       if(text.length<40) throw new Error('empty');
       noFile(); fileInfo = {name:file.name, size:file.size, kind:'docx'};
       resumeEl.value = text; saveDraft(); setStatus(`Read ${file.name}. Your report is below.`, 'ok');
+    }else if(/\.(png|jpe?g|webp)$/.test(name) || /^image\/(png|jpe?g|webp)$/.test(file.type)){
+      noFile();
+      const text = await ocrImages([file], ocrStatus('Reading your photo with OCR'));
+      if(text.replace(/\s/g,'').length < 80) throw new Error('empty');
+      fileInfo = {name:file.name, size:file.size, kind:'image', scanned:true};
+      resumeEl.value = text; saveDraft();
+      setStatus('A photo of a resume cannot be read by an ATS. We read it with OCR: check the text below for mistakes, then download it in a template to get a proper PDF or Word file.', 'err');
     }else if(name.endsWith('.txt') || file.type==='text/plain'){
       const text = (await file.text()).trim(); if(text.length<40) throw new Error('empty');
       noFile(); fileInfo = {name:file.name, size:file.size, kind:'txt'};
@@ -1526,7 +1595,7 @@ async function handleFile(file){
     }else throw new Error('unsupported');
     runSat(); toBench();
   }catch(err){
-    setStatus(err.message==='unsupported' ? 'That file type is not supported. Use PDF, DOCX or TXT.'
+    setStatus(err.message==='unsupported' ? 'That file type is not supported. Use PDF, DOCX, TXT or a photo (JPG or PNG).'
       : err.message==='empty' ? 'No readable text found in that file. Paste the resume text in the report section instead.'
       : 'That file could not be read. Paste the resume text in the report section instead.', 'err');
   }
