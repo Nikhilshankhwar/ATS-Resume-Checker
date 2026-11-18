@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://nikhilshankhwar.github.io/ATS-Resume-Checker/sitemap.xml
+Sitemap: https://resumesat.com/sitemap.xml

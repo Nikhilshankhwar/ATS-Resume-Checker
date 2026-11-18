@@ -12,7 +12,7 @@
 // None of these are ever in the website code.
 
 // Only these websites may use this server.
-const ALLOWED_ORIGINS = ['https://nikhilshankhwar.github.io'];
+const ALLOWED_ORIGINS = ['https://resumesat.com', 'https://www.resumesat.com', 'https://nikhilshankhwar.github.io'];
 
 // Tried in order. Each model has its own free daily limit on Groq,
 // so when one is used up the next one answers.
