@@ -187,6 +187,8 @@ details.textwrap .in{padding:0 10px 10px;}
 @media (max-width:560px){.score-card{grid-template-columns:1fr;}}
 .score-left{display:flex;gap:18px;align-items:center;flex-wrap:wrap;}
 .verdict p{margin:8px 0 0;color:var(--muted);font-size:14px;max-width:38ch;}
+.share{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;margin-top:12px;padding-top:12px;border-top:1px dashed var(--line);font-size:13px;color:var(--muted);}
+.share .btn{text-decoration:none;} .share .sh-wa{border-color:#25D366;color:#128C4A;} .share .sh-li{border-color:#0A66C2;color:#0A66C2;}
 .jobfit{display:grid;gap:3px;border:1.5px solid var(--line);border-left-width:5px;border-radius:8px;padding:8px 11px;margin:10px 0 6px;background:var(--card2);font-size:13.5px;}
 .jobfit b{font-size:16px;}
 .jobfit span{color:var(--ink);}
@@ -1299,6 +1301,21 @@ function analyse(resume, jd){
 /* ---------- report ---------- */
 let lastRun = null, fixFns = [];
 $('run').addEventListener('click', ()=>{ runSat(); });
+/* ---------- share your score (sends only the score and the site link, never the resume) ---------- */
+const SITE_LINK = 'https://resumesat.com';
+function shareText(n){ return `My resume scored ${n}/100 on the free ATS checker at resumesat.com. Check yours in 30 seconds, no sign-up: ${SITE_LINK}`; }
+function shareHtml(n){
+  const t = encodeURIComponent(shareText(n));
+  return `<div class="share" aria-label="Share your score"><span>Share your score:</span>
+    <a class="btn sm sh-wa" href="https://wa.me/?text=${t}" target="_blank" rel="noopener">WhatsApp</a>
+    <a class="btn sm sh-li" href="https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(SITE_LINK)}" target="_blank" rel="noopener">LinkedIn</a>
+    <button class="btn sm" type="button" id="shareMore" data-n="${n}">${navigator.share ? 'More…' : 'Copy text'}</button></div>`;
+}
+async function shareMore(n, btn){
+  const text = shareText(n);
+  if(navigator.share){ try{ await navigator.share({title:'Resume SAT: free ATS resume checker', text, url: SITE_LINK}); }catch(e){} return; }
+  try{ await navigator.clipboard.writeText(text); btn.textContent = '✓ Copied'; }catch(e){ btn.textContent = 'Copy failed'; }
+}
 function runSat(){
   const resume = resumeEl.value.trim(), jd = jdEl.value.trim();
   if(resume.length < 40){ emptyResults('Nothing to check yet','Upload a resume file or paste at least a few lines of text, then check again.'); return; }
@@ -1353,7 +1370,8 @@ function runSat(){
         <div class="verdict"><span class="stamp" style="color:${color}">${word}</span>
           ${R.J ? `<div class="jobfit" style="border-color:${R.fit>=65?'var(--good)':R.fit>=50?'var(--warn)':'var(--bad)'}"><b style="color:${R.fit>=65?'var(--good)':R.fit>=50?'var(--warn)':'var(--bad)'}">Job match: ${R.fit}%</b><span>${R.J.hard.length ? `${R.J.hardHit.length} of ${R.J.hard.length} key skills for this job are in your resume.` : 'No specific skills could be read from the job description.'} ${R.fit<35 ? 'This resume does not fit this job, so an ATS would rank it low however well it is written.' : R.fit<50 ? 'This is a weak fit for this job.' : R.fit<65 ? 'A partial fit: add the missing skills you really have.' : 'A good fit for this job.'}${R.capped ? ' The overall score is limited by this.' : ''}${R.J.short ? ' The job description is very short, so paste the full job posting for an accurate check.' : ''}</span></div>` : ''}
           <p><b style="color:var(--ink)">${passed} of ${live.length} checks passed.</b> ${total>=80?"This should parse cleanly and read well to a recruiter.":total>=60?"A solid base with clear gaps. Work through the items marked to fix.":"Several issues are likely costing you interviews. Start with the red items."}</p>${delta}
-          <div class="row" style="margin-top:10px;">${fixFns.length?'<button id="applyAll" class="btn sm dark" type="button">Apply all quick fixes</button>':''}${(()=>{ const nb = findBlanks(stripNotes(resumeEl.value)).length; return nb ? `<button id="fillNow" class="btn sm" type="button">Fill ${nb} blank${nb>1?'s':''} in [brackets]</button>` : ''; })()}<button id="rerunBtn" class="btn sm" type="button">Check again</button></div></div>
+          <div class="row" style="margin-top:10px;">${fixFns.length?'<button id="applyAll" class="btn sm dark" type="button">Apply all quick fixes</button>':''}${(()=>{ const nb = findBlanks(stripNotes(resumeEl.value)).length; return nb ? `<button id="fillNow" class="btn sm" type="button">Fill ${nb} blank${nb>1?'s':''} in [brackets]</button>` : ''; })()}<button id="rerunBtn" class="btn sm" type="button">Check again</button></div>
+          ${resumeEl.value.includes('(sample)') ? '' : shareHtml(total)}</div>
       </div>
       <div class="catbars">${R.cats.map(k=>`<button class="catbar" type="button" data-jump="cat-${k.id}"><b>${k.name}</b><span class="bar"><i style="width:${Math.round(k.score)}%;background:${colorFor(k.score)}"></i></span><span class="val">${k.passed}/${k.total} · ${Math.round(k.score)}</span></button>`).join('')}</div>
     </div>
@@ -1378,6 +1396,7 @@ function runSat(){
     if(jp){ const d = $(jp.dataset.jump); if(d){ d.open = true; d.scrollIntoView(); } return; }
     if(e.target.id==='applyAll'){ applyAllFixes(); return; }
     if(e.target.id==='rerunBtn'){ runSat(); return; }
+    if(e.target.id==='shareMore'){ shareMore(+e.target.dataset.n, e.target); return; }
     if(e.target.id==='addJd'){ jdEl.focus(); return; }
     const ac = e.target.closest('[data-act]');
     if(ac && ac.dataset.act==='numbers'){ openNumbers(); return; }
@@ -1537,6 +1556,7 @@ function ocrStatus(label){
 async function handleFile(file){
   if(!file) return;
   const name = file.name.toLowerCase();
+  if(lastSampleJd && jdEl.value === lastSampleJd){ jdEl.value = ''; lastSampleJd = ''; saveDraft(); }
   if(file.size > 8*1048576){ setStatus('That file is over 8 MB. Compress it or export it again, then try once more.', 'err'); return; }
   setStatus(`Reading ${file.name}`);
   try{
