@@ -189,6 +189,7 @@ details.textwrap .in{padding:0 10px 10px;}
 @media (max-width:560px){.score-card{grid-template-columns:1fr;}}
 .score-left{display:flex;gap:18px;align-items:center;flex-wrap:wrap;}
 .verdict p{margin:8px 0 0;color:var(--muted);font-size:14px;max-width:38ch;}
+.fixnote{margin:10px 0 0;padding:8px 12px;border-radius:8px;background:#EAF7F0;border:1px solid #BFE5CF;color:#155C36;font-size:13.5px;}
 .share{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;margin-top:12px;padding-top:12px;border-top:1px dashed var(--line);font-size:13px;color:var(--muted);}
 .share .btn{text-decoration:none;} .share .sh-wa{border-color:#25D366;color:#128C4A;} .share .sh-li{border-color:#0A66C2;color:#0A66C2;}
 .jobfit{display:grid;gap:3px;border:1.5px solid var(--line);border-left-width:5px;border-radius:8px;padding:8px 11px;margin:10px 0 6px;background:var(--card2);font-size:13.5px;}
@@ -1319,7 +1320,7 @@ async function shareMore(n, btn){
   try{ await navigator.clipboard.writeText(text); btn.textContent = '✓ Copied'; }catch(e){ btn.textContent = 'Copy failed'; }
 }
 function runSat(){
-  const resume = resumeEl.value.trim(), jd = jdEl.value.trim();
+  const resume = resumeEl.value.trim(), jd = jdEl.value.trim(), fixNote = autoFixNote; autoFixNote = '';
   if(resume.length < 40){ emptyResults('Nothing to check yet','Upload a resume file or paste at least a few lines of text, then check again.'); return; }
   const R = analyse(resume, jd), total = R.total;
   let word, color;
@@ -1372,7 +1373,7 @@ function runSat(){
         <div class="verdict"><span class="stamp" style="color:${color}">${word}</span>
           ${R.J ? `<div class="jobfit" style="border-color:${R.fit>=65?'var(--good)':R.fit>=50?'var(--warn)':'var(--bad)'}"><b style="color:${R.fit>=65?'var(--good)':R.fit>=50?'var(--warn)':'var(--bad)'}">Job match: ${R.fit}%</b><span>${R.J.hard.length ? `${R.J.hardHit.length} of ${R.J.hard.length} key skills for this job are in your resume.` : 'No specific skills could be read from the job description.'} ${R.fit<35 ? 'This resume does not fit this job, so an ATS would rank it low however well it is written.' : R.fit<50 ? 'This is a weak fit for this job.' : R.fit<65 ? 'A partial fit: add the missing skills you really have.' : 'A good fit for this job.'}${R.capped ? ' The overall score is limited by this.' : ''}${R.J.short ? ' The job description is very short, so paste the full job posting for an accurate check.' : ''}</span></div>` : ''}
           <p><b style="color:var(--ink)">${passed} of ${live.length} checks passed.</b> ${total>=80?"This should parse cleanly and read well to a recruiter.":total>=60?"A solid base with clear gaps. Work through the items marked to fix.":"Several issues are likely costing you interviews. Start with the red items."}</p>${delta}
-          <div class="row" style="margin-top:10px;">${fixFns.length?'<button id="applyAll" class="btn sm dark" type="button">Apply all quick fixes</button>':''}${(()=>{ const nb = findBlanks(stripNotes(resumeEl.value)).length; return nb ? `<button id="fillNow" class="btn sm" type="button">Fill ${nb} blank${nb>1?'s':''} in [brackets]</button>` : ''; })()}<button id="rerunBtn" class="btn sm" type="button">Check again</button></div></div>
+          <div class="row" style="margin-top:10px;">${autoFixPlan(resumeEl.value, jd).txt!==resumeEl.value?'<button id="applyAll" class="btn sm dark" type="button">Apply all quick fixes</button>':''}${(()=>{ const nb = findBlanks(stripNotes(resumeEl.value)).length; return nb ? `<button id="fillNow" class="btn sm" type="button">Fill ${nb} blank${nb>1?'s':''} in [brackets]</button>` : ''; })()}<button id="rerunBtn" class="btn sm" type="button">Check again</button></div>${fixNote?`<p class="fixnote">${esc(fixNote)}</p>`:''}</div>
       </div>
       <div class="catbars">${R.cats.map(k=>`<button class="catbar" type="button" data-jump="cat-${k.id}"><b>${k.name}</b><span class="bar"><i style="width:${Math.round(k.score)}%;background:${colorFor(k.score)}"></i></span><span class="val">${k.passed}/${k.total} · ${Math.round(k.score)}</span></button>`).join('')}</div>
     </div>
@@ -1631,17 +1632,28 @@ drop.addEventListener('drop', e=>{ if(e.dataTransfer && e.dataTransfer.files[0])
 let aiBusy = false, undoText = null;
 
 /* quick fixes are re-computed after each one, so a later fix always works on the text the earlier one produced */
-function applyAllFixes(){
-  const jd = jdEl.value.trim(), order = ['Grammar and punctuation','Spelling','Weak phrases','Action verbs','Bullet length'], skip = ['Keyword coverage','Essential sections'], done = {};
-  let txt = resumeEl.value;
+const AUTO_ORDER = ['Grammar and punctuation','Spelling','Weak phrases','Action verbs','Bullet length'], AUTO_SKIP = ['Keyword coverage','Essential sections'];
+function autoFixPlan(txt, jd){
+  const done = {}, names = [];
   for(let n=0;n<16;n++){
     const R = analyse(txt.trim(), jd);
-    const cand = R.checks.filter(c=> c.fix && !skip.includes(c.name) && (done[c.name]||0)<3 && c.fix(txt)!==txt)
-      .sort((a,b)=> (order.indexOf(a.name)<0?9:order.indexOf(a.name)) - (order.indexOf(b.name)<0?9:order.indexOf(b.name)));
+    const cand = R.checks.filter(c=> c.fix && !AUTO_SKIP.includes(c.name) && (done[c.name]||0)<3 && c.fix(txt)!==txt)
+      .sort((a,b)=> (AUTO_ORDER.indexOf(a.name)<0?9:AUTO_ORDER.indexOf(a.name)) - (AUTO_ORDER.indexOf(b.name)<0?9:AUTO_ORDER.indexOf(b.name)));
     if(!cand.length) break;
     txt = cand[0].fix(txt); done[cand[0].name] = (done[cand[0].name]||0)+1;
+    if(!names.includes(cand[0].name)) names.push(cand[0].name);
   }
-  if(txt!==resumeEl.value){ undoText = resumeEl.value; resumeEl.value = txt; saveDraft(); }
+  return {txt, names};
+}
+let autoFixNote = '';
+function applyAllFixes(){
+  const jd = jdEl.value.trim(), before = analyse(resumeEl.value.trim(), jd).total;
+  const plan = autoFixPlan(resumeEl.value, jd);
+  if(plan.txt===resumeEl.value){ autoFixNote = 'Nothing left to fix automatically. The remaining items need your own words: open them below.'; runSat(); return; }
+  undoText = resumeEl.value; resumeEl.value = plan.txt; saveDraft(); syncEditor();
+  const R = analyse(plan.txt.trim(), jd);
+  autoFixNote = '✓ Fixed: ' + plan.names.join(', ') + '. Your text is updated in the editor and the download.'
+    + (R.total<=before ? (R.capped ? ' The score did not go up because the job match limits it: add the missing job skills you really have.' : ' The score did not go up because the remaining items need your own input, such as missing sections or numbers.') : '');
   runSat();
 }
 let numTargets = [];
