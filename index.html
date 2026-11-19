@@ -189,6 +189,9 @@ details.textwrap .in{padding:0 10px 10px;}
 @media (max-width:560px){.score-card{grid-template-columns:1fr;}}
 .score-left{display:flex;gap:18px;align-items:center;flex-wrap:wrap;}
 .verdict p{margin:8px 0 0;color:var(--muted);font-size:14px;max-width:38ch;}
+.jc-group{margin:0 0 12px;display:flex;flex-direction:column;gap:6px;} .jc-group>b{font-size:14px;}
+.jc-diff{font-family:var(--mono);font-size:12.5px;line-height:1.55;background:#fff;border:1px solid var(--line);border-radius:8px;padding:8px 10px;max-height:240px;overflow:auto;}
+.jc-del{color:#A3261B;text-decoration:line-through;} .jc-add{color:#155C36;}
 .fixnote{margin:10px 0 0;padding:8px 12px;border-radius:8px;background:#EAF7F0;border:1px solid #BFE5CF;color:#155C36;font-size:13.5px;}
 .share{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;margin-top:12px;padding-top:12px;border-top:1px dashed var(--line);font-size:13px;color:var(--muted);}
 .share .btn{text-decoration:none;} .share .sh-wa{border-color:#25D366;color:#128C4A;} .share .sh-li{border-color:#0A66C2;color:#0A66C2;}
@@ -502,6 +505,9 @@ code{font-family:var(--mono);background:var(--card2);border:1px solid var(--line
         </details>
         <label class="lbl" for="jdInput">Job description <span style="font-weight:400;color:var(--muted)">(optional, unlocks 4 job-match checks)</span></label>
         <textarea id="jdInput" placeholder="Paste the job description you are applying for"></textarea>
+        <div class="row" style="margin-top:8px;align-items:center;"><label class="btn sm" for="jdFile" style="cursor:pointer;">📷 Upload job post photo or screenshot</label><span class="hint" style="margin:0;">JPG, PNG or PDF. Read in your browser.</span></div>
+        <input class="vh" type="file" id="jdFile" accept=".jpg,.jpeg,.png,.webp,.pdf,image/jpeg,image/png,image/webp,application/pdf">
+        <div class="status" id="jdStatus" aria-live="polite"></div>
         <div class="row" style="margin-top:14px;"><button class="btn primary block" id="run" type="button">Check my resume</button></div>
         <div class="row" style="margin-top:10px;"><button class="btn sm" id="clearBtn" type="button">Clear all</button></div>
         <p class="hint">Nothing is saved: a refresh clears everything and starts a new check. Fixes change the editable text, never your original file.</p>
@@ -1265,6 +1271,7 @@ function analyse(resume, jd){
       const head = (W.bySec.top.concat(W.bySec.summary||[])).join(' ').toLowerCase();
       const words = J.title.toLowerCase().split(/[^a-z0-9+#]+/).filter(w=>w.length>1 && !STOPWORDS.has(w));
       const hit = words.length && words.filter(w=> phraseIn(w, head)).length >= Math.max(1, Math.ceil(words.length*0.6));
+      J.titleHit = !!hit;
       add('tailor','Job title match', hit?100:35, hit ? `The target title "${esc(J.title)}" appears in your header or summary.` : `The job title is "${esc(J.title)}", but it does not appear in your header or summary. If it honestly describes you, use it as your headline.`);
     } else add('tailor','Job title match', 0, 'No job title could be read from the job description.', {na:true});
     const allMiss = [...J.hardMiss, ...J.softMiss, ...J.wordMiss];
@@ -1378,6 +1385,7 @@ function runSat(){
       <div class="catbars">${R.cats.map(k=>`<button class="catbar" type="button" data-jump="cat-${k.id}"><b>${k.name}</b><span class="bar"><i style="width:${Math.round(k.score)}%;background:${colorFor(k.score)}"></i></span><span class="val">${k.passed}/${k.total} · ${Math.round(k.score)}</span></button>`).join('')}</div>
     </div>
     ${catHtml}${locked}
+    ${R.J ? jobChangesHtml(R.J) : ''}
     ${skillsPanelHtml(!!R.J)}
     <div class="panel" data-needs="ai" hidden>
       <h3>AI upgrade</h3>
@@ -1391,6 +1399,7 @@ function runSat(){
   { const st=$('edStale'); if(st) st.hidden=true; }
   syncEditor(); renderRack();
   const P = $('resultsPanel');
+  P.onchange = (e=>{ if(e.target.dataset && e.target.dataset.jc && jcPending!==null){ jcPending = null; const o=$('jcOut'); if(o) o.innerHTML='<p class="hint" style="margin-top:10px;">Your ticks changed. Press Preview changes again.</p>'; } });
   P.onclick = (e)=>{
     const fx = e.target.closest('[data-fix]');
     if(fx && !fx.disabled){ resumeEl.value = fixFns[+fx.dataset.fix](resumeEl.value); saveDraft(); syncEditor(); $('textWrap').open = true; fx.textContent='✓ Applied. Check again to rescore'; fx.disabled=true; fx.classList.add('done'); return; }
@@ -1398,6 +1407,9 @@ function runSat(){
     if(jp){ const d = $(jp.dataset.jump); if(d){ d.open = true; d.scrollIntoView(); } return; }
     if(e.target.id==='applyAll'){ applyAllFixes(); return; }
     if(e.target.id==='rerunBtn'){ runSat(); return; }
+    if(e.target.id==='jcPreview'){ jcPreview(P); return; }
+    if(e.target.id==='jcApply'){ jcApply(); return; }
+    if(e.target.id==='jcCancel'){ jcPending = null; const o=$('jcOut'); if(o) o.innerHTML=''; return; }
     if(e.target.id==='shareMore'){ shareMore(+e.target.dataset.n, e.target); return; }
     if(e.target.id==='addJd'){ jdEl.focus(); return; }
     const ac = e.target.closest('[data-act]');
@@ -1656,6 +1668,78 @@ function applyAllFixes(){
     + (R.total<=before ? (R.capped ? ' The score did not go up because the job match limits it: add the missing job skills you really have.' : ' The score did not go up because the remaining items need your own input, such as missing sections or numbers.') : '');
   runSat();
 }
+/* ---------- changes for this job: suggest, preview, then apply only what the user ticks ---------- */
+let jcPending = null, jcMsg = '';
+function cleanTitle(t){ return String(t||'').replace(/\s+/g,' ').replace(/^(job title|position|role|designation)\s*[:\-]\s*/i,'').replace(/[.:;,\-–]+$/,'').trim().split(' ').map(w=> /^[a-z]/.test(w) && w.length>3 ? w[0].toUpperCase()+w.slice(1) : w).join(' '); }
+function setHeadline(text, title){
+  const lines = text.split('\n'); const idx = lines.map((l,i)=>[l.trim(),i]).filter(x=>x[0]);
+  if(!idx.length) return text;
+  const name = idx[0][1], next = idx[1];
+  if(next && !CONTACT_LINE.test(next[0]) && next[0].length<=70 && !isHeading(next[0], true) && !BUL.test(next[0])) lines[next[1]] = title;
+  else lines.splice(name+1, 0, title);
+  return lines.join('\n');
+}
+function jobChangesHtml(J){
+  const title = J.title && !J.titleHit ? cleanTitle(J.title) : '';
+  const hard = (J.hardMiss||[]).map(prettySkill), soft = (J.softMiss||[]).map(prettySkill);
+  const msg = jcMsg; jcMsg = '';
+  if(!title && !hard.length && !soft.length) return `<div class="panel" id="jobChanges"><h3>Changes for this job</h3><p class="hint" style="margin:0;">${msg ? esc(msg) : 'Your resume already has this job\'s title and the skills this checker could read from the job description.'}</p></div>`;
+  const chips = (arr, kind) => arr.map(x=>`<label class="chip"><input type="checkbox" data-jc="${kind}" value="${esc(x)}"> ${esc(x)}</label>`).join('');
+  return `<div class="panel" id="jobChanges">
+      <h3>Changes for this job</h3>
+      <p class="hint" style="margin:0 0 10px;">Tick only what is true for you, then press <b>Preview changes</b>. Nothing in your resume changes until you check the preview and press <b>Apply</b>.</p>
+      ${msg ? `<p class="fixnote" style="margin:0 0 10px;">${esc(msg)}</p>` : ''}
+      ${title ? `<div class="jc-group"><b>Job title</b><label class="chip"><input type="checkbox" data-jc="title" value="${esc(title)}"> Use "${esc(title)}" as the headline under your name</label></div>` : ''}
+      ${hard.length ? `<div class="jc-group"><b>Skills the job asks for that are not in your resume</b><div class="chips">${chips(hard,'skill')}</div></div>` : ''}
+      ${soft.length ? `<div class="jc-group"><b>Soft skills the job mentions</b><div class="chips">${chips(soft,'skill')}</div><span class="hint" style="margin:0;">Better still, show these through an achievement in a bullet.</span></div>` : ''}
+      <div class="row" style="margin-top:12px;"><button class="btn primary sm" type="button" id="jcPreview">Preview changes</button></div>
+      <div id="jcOut"></div>
+    </div>`;
+}
+function jcPreview(P){
+  const out = $('jcOut'); if(!out) return;
+  const t = P.querySelector('[data-jc="title"]:checked'), sk = [...P.querySelectorAll('[data-jc="skill"]:checked')].map(c=>c.value);
+  if(!t && !sk.length){ out.innerHTML = '<p class="status err" style="margin-top:10px;">Tick at least one change first.</p>'; return; }
+  let txt = resumeEl.value;
+  if(t) txt = setHeadline(txt, t.value);
+  if(sk.length){ const listed = walk(txt).bySec.skills ? walk(txt).bySec.skills.join('\n').toLowerCase() : ''; const add = sk.filter(x=> !phraseIn(x.toLowerCase(), listed)); if(add.length) txt = addSkillsToText(txt, add); }
+  if(txt===resumeEl.value){ out.innerHTML = '<p class="status" style="margin-top:10px;">These are already in your resume, so nothing would change.</p>'; return; }
+  const a = resumeEl.value.split('\n').map(l=>l.trim()), b = txt.split('\n').map(l=>l.trim());
+  const removed = a.filter(l=> l && !b.includes(l)), added = b.filter(l=> l && !a.includes(l));
+  jcPending = txt;
+  out.innerHTML = `<div class="ai-box" style="margin-top:12px;"><h4>PREVIEW: THESE LINES WILL CHANGE</h4>
+      <div class="jc-diff">${removed.map(l=>`<div class="jc-del">− ${esc(l)}</div>`).join('')}${added.map(l=>`<div class="jc-add">+ ${esc(l)}</div>`).join('')}</div>
+      <div class="row" style="margin-top:10px;"><button class="btn primary sm" type="button" id="jcApply">Apply these changes</button><button class="btn sm" type="button" id="jcCancel">Cancel</button></div></div>`;
+}
+function jcApply(){
+  if(jcPending===null) return;
+  undoText = resumeEl.value; resumeEl.value = jcPending; jcPending = null; saveDraft(); syncEditor();
+  jcMsg = '✓ Changes applied. They are in the editor and will be in your download.';
+  runSat();
+}
+
+/* ---------- job description from a photo or screenshot (read in the browser with OCR) ---------- */
+async function handleJdFile(file){
+  const st = $('jdStatus'); if(!file || !st) return;
+  const name = (file.name||'').toLowerCase();
+  if(file.size > 8*1048576){ st.className='status err'; st.textContent='That file is over 8 MB.'; return; }
+  st.className='status'; st.textContent='Reading the job post…';
+  try{
+    let text = '';
+    if(name.endsWith('.pdf') || file.type==='application/pdf'){
+      const out = await readPdf(file);
+      text = out.info.chars >= 150 ? out.text : await ocrImages(await pdfToCanvases(out.doc, 3), p=>{ st.textContent = `Reading the job post: ${Math.round((p||0)*100)}%`; });
+    } else if(/^image\//.test(file.type) || /\.(png|jpe?g|webp)$/.test(name)){
+      text = await ocrImages([file], p=>{ st.textContent = `Reading the job post: ${Math.round((p||0)*100)}%. This takes 10 to 30 seconds the first time.`; });
+    } else { st.className='status err'; st.textContent='Use a photo (JPG or PNG), a screenshot or a PDF of the job post.'; return; }
+    text = String(text).replace(/\n{3,}/g,'\n\n').trim();
+    if(text.replace(/\s/g,'').length < 40){ st.className='status err'; st.textContent='Could not read enough text. Try a clearer, straight screenshot, or paste the text.'; return; }
+    jdEl.value = text; lastSampleJd = ''; saveDraft();
+    st.className='status ok'; st.textContent='Job description read from the image. Check it for mistakes, then see "Changes for this job" in your report.';
+    if(resumeEl.value.trim().length >= 40){ runSat(); }
+  }catch(e){ st.className='status err'; st.textContent='Could not read that file. Try a clearer screenshot, or paste the text.'; }
+}
+(function(){ const f = $('jdFile'); if(f && f.addEventListener) f.addEventListener('change', e=>{ handleJdFile(e.target.files[0]); e.target.value=''; }); })();
 let numTargets = [];
 function openNumbers(){
   const box = $('qa-numbers'); if(!box || !lastRun) return;
