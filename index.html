@@ -1517,7 +1517,26 @@ async function readPdf(file){
         }
       }
     });
-    if(gutters.length>=8 && gutters.length/Math.max(lines.length,1) > 0.28){
+    /* a sidebar layout leaves an empty vertical band that no text crosses: find it */
+    let band = 0;
+    if(!(gutters.length>=8 && gutters.length/Math.max(lines.length,1) > 0.28) && items.length > 30){
+      const total = items.reduce((a,it)=>a+it.s.length,0); let best = null, run = null;
+      for(let x = vw*0.18; x <= vw*0.6; x += 2){
+        const hit = items.some(it=> it.x < x && it.x+it.w > x);
+        if(!hit){ if(!run) run = {a:x, b:x}; else run.b = x; }
+        if(hit || x+2 > vw*0.6){ if(run && (!best || run.b-run.a > best.b-best.a)) best = run; run = null; }
+      }
+      if(best && best.b-best.a >= 12){
+        const g = (best.a+best.b)/2, L = items.filter(it=>it.x<g), Rt = items.filter(it=>it.x>=g);
+        const lc = L.reduce((a,it)=>a+it.s.length,0), rc = Rt.reduce((a,it)=>a+it.s.length,0);
+        if(lc > total*0.12 && rc > total*0.12 && toLines(L).length >= 6 && toLines(Rt).length >= 6){ band = g; colLines += 8; }
+      }
+    }
+    if(band){
+      const Lc = items.filter(it=>it.x<band), Rc = items.filter(it=>it.x>=band), len = a => a.reduce((n,it)=>n+it.s.length,0);
+      const [first, second] = len(Rc) >= len(Lc) ? [Rc, Lc] : [Lc, Rc];
+      full += joinLines(toLines(first)) + '\n' + joinLines(toLines(second)) + '\n\n';
+    } else if(gutters.length>=8 && gutters.length/Math.max(lines.length,1) > 0.28){
       gutters.sort((a,b)=>a-b); const g = gutters[Math.floor(gutters.length/2)];
       full += joinLines(toLines(items.filter(it=>it.x<g))) + '\n' + joinLines(toLines(items.filter(it=>it.x>=g))) + '\n\n';
     } else full += joinLines(lines) + '\n\n';
@@ -1622,9 +1641,18 @@ async function handleFile(file){
       try{
         const res = await mammoth.convertToHtml({arrayBuffer: buf});
         const doc = new DOMParser().parseFromString(res.value||'', 'text/html'), out = [];
+        const cellLines = (cell, push) => cell.querySelectorAll('p,h1,h2,h3,h4,h5,h6,li').forEach(x=>{
+          if(x.closest('li') && x.tagName!=='LI' || (x.tagName==='LI' && x.parentElement.closest('li'))) return;
+          const t = (x.tagName==='LI' ? [...x.childNodes].filter(n=> !(n.nodeType===1 && /^(UL|OL)$/.test(n.tagName))).map(n=>n.textContent).join(' ') : x.textContent).replace(/\s+/g,' ').trim();
+          if(t) push((x.tagName==='LI' && !BUL.test(t) ? '• ' : '') + t);
+        });
         doc.body.querySelectorAll('p,h1,h2,h3,h4,h5,h6,li,tr').forEach(el=>{
           if(el.closest('li') && el.tagName!=='LI') return;
-          if(el.tagName==='P' && el.closest('td')) return;
+          if(el.tagName!=='TR' && el.closest('td')) return;
+          /* a table used for layout (sidebar, photo header): read each cell top to bottom instead of joining it into one line */
+          if(el.tagName==='TR' && [...el.children].some(c=> c.querySelectorAll('p,li,h1,h2,h3,h4,h5,h6').length>1 || c.textContent.trim().length>90)){
+            [...el.children].sort((x,y)=> y.textContent.trim().length - x.textContent.trim().length).forEach(c=> cellLines(c, t=> out.push(t))); return;
+          }
           let t = (el.tagName==='LI' ? [...el.childNodes].filter(n=> !(n.nodeType===1 && /^(UL|OL)$/.test(n.tagName))).map(n=>n.textContent).join(' ') : el.tagName==='TR' ? [...el.children].map(c=>c.textContent.trim()).filter(Boolean).join(' | ') : el.textContent).replace(/\s+/g,' ').trim();
           if(!t) return;
           out.push((el.tagName==='LI' && !BUL.test(t) ? '• ' : '') + t);
@@ -2092,7 +2120,12 @@ function textToBlocks(text){
 function arrange(blocks, t){
   const top=[], secs=[]; let cur=null;
   blocks.forEach(b=>{ if(b.type==='head'){ cur={head:b, key:keyOf(b.text), items:[]}; secs.push(cur); } else if(cur) cur.items.push(b); else top.push(b); });
-  const rank = k => { const i = t.order.indexOf(k); return i<0 ? 50 : i; };
+  let order = t.order.slice();
+  /* education-first layouts are for freshers: with a year or more of work history, experience goes above education */
+  try{ const W = walk(resumeEl.value), months = rangesOf(W.bySec.experience||[]).reduce((a,r)=>a+(r[1]-r[0]),0);
+    const iE = order.indexOf('experience'), iD = order.indexOf('education');
+    if(months>=12 && iE>=0 && iD>=0 && iD<iE){ order.splice(iD,1); order.splice(order.indexOf('experience')+1, 0, 'education'); } }catch(e){}
+  const rank = k => { const i = order.indexOf(k); return i<0 ? 50 : i; };
   secs.map((s,i)=>({s,i})).sort((a,b)=> (rank(a.s.key)-rank(b.s.key)) || (a.i-b.i)).forEach(o=>{ top.push(o.s.head, ...o.s.items); });
   return top;
 }
