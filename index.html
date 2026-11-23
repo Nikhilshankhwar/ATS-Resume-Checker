@@ -1485,13 +1485,15 @@ function joinLines(lines){
   const out = [];
   info.forEach((cur,i)=>{
     const prev = i ? info[i-1] : null, last = out[out.length-1];
-    const filled = prev && prev.right >= pageRight - width*0.12;
+    const filled = prev && (prev.right >= pageRight - width*0.12 || (/^[a-z(]/.test(cur.text) && !/[.:;!?]$/.test(prev.text)) || /[,(&\/]$|\b(and|or|of|in|for|with|the|to)$/i.test(prev.text) || (prev.text.split('(').length > prev.text.split(')').length) || (cur.text.split(' ').length<=2 && /\//.test(cur.text) && !/[.:;!?]$/.test(prev.text) && keyOf(cur.text)==='other'));
     const gapOk = prev && (prev.y - cur.y) > 0 && (prev.y - cur.y) <= Math.max(usualGap*1.35, prev.h*1.6);
     const sameSize = prev && Math.abs(cur.h - prev.h) <= Math.max(1.2, prev.h*0.18);
     const isLabel = /^[A-Z][\w &/().+-]{1,32}:\s/.test(cur.text) && !/[,&/(\-–]$/.test(prev ? prev.text : '');
     const joinable = last && filled && gapOk && sameSize && !cur.bullet && !isLabel && !last.head
       && !isHeading(cur.text, false) && !(DATE_RE.test(cur.text) && cur.text.length < 60) && cur.x >= baseX - 3
       && !(!anyBullet && cur.x > baseX + 6 && /[.;!]$/.test(prev.text) && /^[A-Z]/.test(cur.text));
+    /* a heading split over two lines, like "EDUCATION AND" + "CERTIFICATIONS" */
+    if(last && gapOk && /^[A-Z][A-Z &/]* (AND|&|OF)$/.test(last.text) && /^[A-Z][A-Z &/]{2,30}$/.test(cur.text)){ last.text += ' ' + cur.text; return; }
     if(joinable){
       last.text = /[A-Za-z0-9]-$/.test(last.text) && /^[a-z0-9]/.test(cur.text) ? last.text + cur.text : last.text + ' ' + cur.text;
       return;
@@ -1506,7 +1508,7 @@ function joinLines(lines){
 async function readPdf(file){
   if(!window.pdfjsLib) throw new Error('nopdf');
   const doc = await pdfjsLib.getDocument({data: await file.arrayBuffer()}).promise;
-  const fonts = new Set(); let full='', chars=0, colLines=0, totalLines=0;
+  const fonts = new Set(); let full='', chars=0, colLines=0, totalLines=0, bandPages=0;
   for(let p=1;p<=doc.numPages;p++){
     setStatus(`Reading ${file.name}: page ${p} of ${doc.numPages}`);
     const page = await doc.getPage(p);
@@ -1537,15 +1539,15 @@ async function readPdf(file){
     let band = 0;
     if(!(gutters.length>=8 && gutters.length/Math.max(lines.length,1) > 0.28) && items.length > 30){
       const total = items.reduce((a,it)=>a+it.s.length,0); let best = null, run = null;
-      for(let x = vw*0.18; x <= vw*0.6; x += 2){
+      for(let x = vw*0.18; x <= vw*0.82; x += 2){
         const hit = items.some(it=> it.x < x && it.x+it.w > x);
         if(!hit){ if(!run) run = {a:x, b:x}; else run.b = x; }
-        if(hit || x+2 > vw*0.6){ if(run && (!best || run.b-run.a > best.b-best.a)) best = run; run = null; }
+        if(hit || x+2 > vw*0.82){ if(run && (!best || run.b-run.a > best.b-best.a)) best = run; run = null; }
       }
       if(best && best.b-best.a >= 12){
         const g = (best.a+best.b)/2, L = items.filter(it=>it.x<g), Rt = items.filter(it=>it.x>=g);
         const lc = L.reduce((a,it)=>a+it.s.length,0), rc = Rt.reduce((a,it)=>a+it.s.length,0);
-        if(lc > total*0.12 && rc > total*0.12 && toLines(L).length >= 6 && toLines(Rt).length >= 6){ band = g; colLines += 8; }
+        if(lc > total*0.12 && rc > total*0.12 && toLines(L).length >= 6 && toLines(Rt).length >= 6){ band = g; colLines += 8; bandPages++; }
       }
     }
     if(band){
@@ -1557,7 +1559,7 @@ async function readPdf(file){
       full += joinLines(toLines(items.filter(it=>it.x<g))) + '\n' + joinLines(toLines(items.filter(it=>it.x>=g))) + '\n\n';
     } else full += joinLines(lines) + '\n\n';
   }
-  return {text: full.trim(), doc, info:{pages:doc.numPages, fonts:fonts.size, chars, multiCol: colLines>=8 && colLines/Math.max(totalLines,1) > 0.2}};
+  return {text: full.trim(), doc, info:{pages:doc.numPages, fonts:fonts.size, chars, multiCol: bandPages>0 || (colLines>=8 && colLines/Math.max(totalLines,1) > 0.2)}};
 }
 async function renderPdfPage(){
   if(!pdfDoc) return;
@@ -2124,9 +2126,20 @@ function textToBlocks(text){
   const blocks = []; let seenHead=false, top=0, contactSeen=false;
   for(let i=0;i<lines.length;i++){
     const t = lines[i]; if(!t) continue;
+    const pb0 = blocks[blocks.length-1];
+    /* "Modbus" + "RTU/TCP": a short tail of an unfinished bullet, not a heading */
+    if(seenHead && pb0 && pb0.type==='bullet' && !/[.!?:;]$/.test(pb0.text) && t.split(/\s+/).length<=3 && keyOf(t)==='other' && !DATE_RE.test(t) && /[\/\d]/.test(t)){ pb0.text += ' ' + t; continue; }
+    /* a long entry title wrapped onto a second line */
+    if(seenHead && pb0 && (pb0.type==='bold' || (pb0.type==='para' && BUL.test(lines.slice(i+1).find(x=>x)||''))) && !pb0.date && pb0.text.length>=45 && pb0.text.length<110 && !/[.!?:;|,]$/.test(pb0.text) && t.length<45 && !DATE_RE.test(t) && !BUL.test(t) && !isHeading(t,false)){ const m = t.match(DATE_TAIL); pb0.text += ' ' + (m ? m[1].trim() : t); if(m) pb0.date = m[2].trim(); pb0.type = 'bold'; continue; }
     if(top>0 && isHeading(t, !contactSeen && !seenHead)){ blocks.push({type:'head', text:t.replace(/:$/,'').toUpperCase()}); seenHead=true; continue; }
     if(!seenHead){ if(CONTACT_LINE.test(t)) contactSeen=true; blocks.push({type: top===0 ? 'name' : 'contact', text:t}); top++; continue; }
     if(BUL.test(t)){ blocks.push({type:'bullet', text:stripBul(t)}); continue; }
+    /* a wrapped tail of the bullet above ("33/11kV.", "TRANSCO, KSEB, and UPCL.") is not a new entry */
+    const pb = blocks[blocks.length-1];
+    if(pb && (pb.type==='bullet' || pb.type==='para') && !DATE_RE.test(t) && !/:$/.test(pb.text)
+      && (/^[a-z0-9(,&]/.test(t) || /[,&(\/-]$|\b(and|or|of|in|for|with|the|to|across|at|by)$/i.test(pb.text)
+          || (pb.type==='bullet' && /[.;,]$/.test(t) && !/[.!?]$/.test(pb.text) && t.length < 90))){
+      pb.text = /[A-Za-z]-$/.test(pb.text) && /^[a-z]/.test(t) ? pb.text + t : pb.text + ' ' + t; continue; }
     let next=''; for(let j=i+1;j<lines.length;j++){ if(lines[j]){ next=lines[j]; break; } }
     if(t.length<110 && (DATE_RE.test(t) || BUL.test(next))){ const m = t.match(DATE_TAIL); blocks.push(m ? {type:'bold', text:m[1].trim(), date:m[2].trim()} : {type:'bold', text:t}); }
     else blocks.push({type:'para', text:t});
