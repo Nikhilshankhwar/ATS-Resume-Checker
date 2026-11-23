@@ -529,6 +529,43 @@ code{font-family:var(--mono);background:var(--card2);border:1px solid var(--line
 @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .hero{background:radial-gradient(520px 520px at 4% 0%,rgba(255,122,51,.22),transparent 70%),radial-gradient(480px 480px at 96% 14%,rgba(102,171,244,.16),transparent 70%),linear-gradient(180deg,#1A120D,var(--paper));}
   :root:not([data-theme="light"]) .pcard h3,:root:not([data-theme="light"]) .pcard a{color:#121C27;} }
 :root[data-theme="dark"] .hero{background:radial-gradient(520px 520px at 4% 0%,rgba(255,122,51,.22),transparent 70%),linear-gradient(180deg,#1A120D,var(--paper));}
+
+/* ===== futuristic touches on the light theme ===== */
+@keyframes rsat-scan{0%{top:-30%}100%{top:100%}}
+@keyframes rsat-pulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(52,211,153,.55)}50%{opacity:.6;box-shadow:0 0 0 6px rgba(52,211,153,0)}}
+@keyframes rsat-blink{50%{opacity:0}}
+.hero{background-image:
+  linear-gradient(rgba(139,92,246,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(139,92,246,.07) 1px,transparent 1px),
+  radial-gradient(520px 520px at 4% 0%,rgba(255,138,76,.38),transparent 70%),
+  radial-gradient(480px 480px at 96% 14%,rgba(139,92,246,.22),transparent 70%),
+  radial-gradient(400px 400px at 78% 100%,rgba(34,211,238,.20),transparent 70%),
+  linear-gradient(180deg,#FFE6D6 0%,#FFF6EF 55%,var(--paper) 100%);
+  background-size:56px 56px,56px 56px,auto,auto,auto,auto;}
+.hero h1.h1-kw{display:inline-flex;align-items:center;gap:8px;}
+.live{width:8px;height:8px;border-radius:99px;background:#34D399;display:inline-block;animation:rsat-pulse 1.8s ease-in-out infinite;}
+.hero .h1-look em{background:linear-gradient(90deg,#8B5CF6 0%,#E8591A 55%,#FF8A4C 100%);-webkit-background-clip:text;background-clip:text;color:transparent;}
+.upcard{box-shadow:0 0 0 1px rgba(139,92,246,.18),0 24px 60px -18px rgba(232,89,26,.30),0 0 50px -10px rgba(139,92,246,.22);}
+.upcard .drop{position:relative;overflow:hidden;}
+.scanbeam{position:absolute;left:0;right:0;top:-30%;height:34%;pointer-events:none;background:linear-gradient(180deg,rgba(139,92,246,0),rgba(139,92,246,.10) 70%,rgba(34,211,238,.35));border-bottom:2px solid rgba(34,211,238,.75);box-shadow:0 6px 16px -4px rgba(34,211,238,.6);animation:rsat-scan 3.4s ease-in-out infinite alternate;}
+.drop > *:not(.scanbeam){position:relative;z-index:1;}
+.btn.primary{box-shadow:0 0 0 0 transparent,0 8px 24px -6px rgba(232,89,26,.65);}
+.btn.primary.lg{background:linear-gradient(90deg,#E8591A,#FF3D7F);border-color:transparent;}
+.fbadge{border:1px solid rgba(139,92,246,.16);box-shadow:0 16px 40px -10px rgba(18,28,39,.22),0 0 24px -8px rgba(139,92,246,.30);}
+.term{max-width:900px;margin:0 auto;border-radius:20px;overflow:hidden;background:#0B1120;border:1px solid rgba(139,92,246,.35);box-shadow:0 30px 70px -30px rgba(18,28,39,.6),0 0 60px -20px rgba(139,92,246,.45);text-align:left;}
+.term-bar{display:flex;gap:8px;align-items:center;padding:12px 18px;background:rgba(255,255,255,.05);}
+.term-bar i{width:11px;height:11px;border-radius:99px;background:#FF5F57;} .term-bar i:nth-child(2){background:#FEBC2E;} .term-bar i:nth-child(3){background:#28C840;}
+.term-bar span{font-family:var(--mono);font-size:12px;color:#7C8BA1;margin-left:10px;}
+.term-body{padding:22px 26px 26px;font-family:var(--mono);font-size:clamp(14px,1.5vw,16px);line-height:1.55;}
+.term-body p{margin:0 0 10px;display:flex;gap:14px;}
+.term-body b{font-weight:600;flex:none;}
+.t-del{color:#94A3B8;} .t-del b{color:#FF6B6B;}
+.t-add{color:#E6EDF7;} .t-add b{color:#34D399;}
+.t-note{padding-left:26px;font-size:.88em;} .t-note.bad{color:#FF8A80;} .t-note.good{color:#6EE7B7;margin-bottom:0;}
+.caret{display:inline-block;width:9px;height:1.1em;background:#67E8F9;margin-left:6px;vertical-align:-3px;animation:rsat-blink 1s steps(1) infinite;}
+.cta{position:relative;overflow:hidden;}
+.cta::before{content:"";position:absolute;left:50%;top:40%;width:760px;max-width:90%;height:240px;transform:translate(-50%,-50%);border-radius:999px;background:linear-gradient(90deg,rgba(34,211,238,.35),rgba(139,92,246,.45),rgba(255,107,44,.35));filter:blur(90px);pointer-events:none;}
+.cta .wrap{position:relative;}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .hero{background-image:linear-gradient(rgba(139,156,255,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(139,156,255,.07) 1px,transparent 1px),radial-gradient(520px 520px at 4% 0%,rgba(139,92,246,.30),transparent 70%),radial-gradient(480px 480px at 96% 14%,rgba(34,211,238,.18),transparent 70%),linear-gradient(180deg,#120E1C,var(--paper));} }
 </style>
 <link rel="manifest" href="/manifest.webmanifest">
 <meta name="theme-color" content="#FBF7F3">
@@ -557,7 +594,7 @@ code{font-family:var(--mono);background:var(--card2);border:1px solid var(--line
 
 <section class="hero"><div class="wrap hero-in">
   <a class="newpill" href="https://resumesat.com/tools.html"><b>NEW</b>LinkedIn checker, salary calculator and 8 more free tools</a>
-  <h1 class="h1-kw">Free ATS resume checker</h1>
+  <h1 class="h1-kw"><i class="live" aria-hidden="true"></i>Free ATS resume checker · AI scanner online</h1>
   <p class="h1-look">Get your resume past the software, and <em>into human hands</em></p>
   <p class="lead">Free ATS resume check in 10 seconds. See your score, fix what fails, download a clean resume. No sign-up.</p>
   <div class="upcard">
@@ -566,6 +603,7 @@ code{font-family:var(--mono);background:var(--card2);border:1px solid var(--line
       <b>Drag &amp; drop your resume</b>
       <small>PDF, Word or a phone photo · up to 8 MB</small>
       <span class="btn primary lg fake">Upload resume →</span>
+      <i class="scanbeam" aria-hidden="true"></i>
     </label>
     <input class="vh" type="file" id="resumeFile" accept=".pdf,.docx,.txt,.jpg,.jpeg,.png,.webp,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain,image/jpeg,image/png,image/webp">
     <div class="up-row"><button type="button" id="sampleBtn" class="btn">Try a sample resume</button><a class="jdhint" href="#bench">Optional: add the job description for a match score →</a></div>
@@ -581,10 +619,14 @@ code{font-family:var(--mono);background:var(--card2);border:1px solid var(--line
 
 <section class="sec b2ba" aria-label="Before and after example"><div class="wrap">
   <div class="sec-head center"><div><div class="kicker">See the difference</div><h2>One bullet, before and after</h2></div></div>
-  <div class="bapair">
-    <div class="bacard bad"><div class="batop"><span class="tag">BEFORE</span><b>41 / 100</b></div><p>• Responsible for handling sales in my area.</p><div class="chips"><span>✕ Weak phrase</span><span>✕ No number</span><span>✕ No result</span></div></div>
-    <span class="baarrow" aria-hidden="true">→</span>
-    <div class="bacard good"><div class="batop"><span class="tag">AFTER</span><b>86 / 100</b></div><p>• Grew area sales by 28% in 6 months by adding 35 new customer accounts.</p><div class="chips"><span>✓ Strong action verb</span><span>✓ Number and result</span><span>✓ Job keyword</span></div></div>
+  <div class="term" role="group" aria-label="Example: one bullet rewritten">
+    <div class="term-bar"><i></i><i></i><i></i><span>resume-sat ~ rewrite --bullet 3</span></div>
+    <div class="term-body">
+      <p class="t-del"><b>−</b>Responsible for handling sales in my area.</p>
+      <p class="t-note bad">score 41/100 · weak phrase · no number · no result</p>
+      <p class="t-add"><b>+</b>Grew area sales by 28% in 6 months by adding 35 new customer accounts.</p>
+      <p class="t-note good">score 86/100 · action verb ✓ · number ✓ · result ✓<i class="caret" aria-hidden="true"></i></p>
+    </div>
   </div>
   <p class="bafoot">“Apply all quick fixes” and the AI rewrite do this for every bullet, using only facts from your resume.</p>
 </div></section>
