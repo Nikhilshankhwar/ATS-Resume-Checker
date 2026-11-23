@@ -105,6 +105,16 @@ button,input,textarea{font:inherit;color:inherit;}
 .drop b{font-size:17px;}
 .drop small{font-size:13px;color:var(--hero-muted);}
 .drop .fake{pointer-events:none;}
+.nav-links a.nav-tools{color:#fff;background:var(--accent,#E8590C);font-weight:600;}.nav-links a.nav-tools:hover{background:var(--accent,#E8590C);filter:brightness(1.08);color:#fff;}
+.tstrip{background:var(--card,#fff);border-bottom:1px solid var(--line);}
+.tstrip-in{display:flex;gap:8px;align-items:center;overflow-x:auto;padding:14px 0;scrollbar-width:thin;}
+.tstrip-in .tlabel{flex:none;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-right:4px;}
+.tstrip-in a{flex:none;display:inline-flex;gap:6px;align-items:center;padding:8px 13px;border:1px solid var(--line);border-radius:99px;font-size:14px;font-weight:600;color:var(--ink);text-decoration:none;background:var(--card2,#F6F8FA);white-space:nowrap;}
+.tstrip-in a:hover{border-color:var(--accent,#E8590C);color:var(--accent,#E8590C);}.tstrip-in a.all{background:none;border-style:dashed;}
+@media (min-width:1100px){.tstrip-in{flex-wrap:wrap;overflow:visible;}}
+.nextsteps{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px;margin-top:10px;}
+.nextsteps a{display:block;border:1px solid var(--line);border-radius:10px;padding:11px 13px;text-decoration:none;color:var(--ink);background:var(--card2,#F6F8FA);}
+.nextsteps a b{display:block;font-size:14px;}.nextsteps a span{font-size:12.5px;color:var(--muted);}.nextsteps a:hover{border-color:var(--accent,#E8590C);}
 .hero-fine{display:flex;gap:8px 18px;flex-wrap:wrap;margin-top:14px;font-size:13px;color:var(--hero-muted);max-width:560px;}
 .hero-fine span::before{content:"✓ ";color:var(--good);font-weight:700;}
 .hero-fine button{background:none;border:none;color:var(--hero-ink);text-decoration:underline;cursor:pointer;padding:0;font-size:13px;}
@@ -447,13 +457,15 @@ code{font-family:var(--mono);background:var(--card2);border:1px solid var(--line
   <div class="logo">RESUME<span>·</span>SAT</div>
   <div class="nav-links">
     <a href="#guide">How to use</a>
-    <a href="#bench">Report</a>
-    <a href="#editor">Edit</a>
+    <a class="opt" href="#bench">Report</a>
+    <a class="opt" href="#editor">Edit</a>
     <a href="#templates">Templates</a>
     <a href="#how" class="opt">How scoring works</a>
-    <a href="#reviews">Reviews</a>
+    <a class="opt" href="#reviews">Reviews</a>
     <a href="#faq" class="opt">FAQ</a>
-    <a href="guides.html">Guides</a>
+    <a href="guides.html" class="opt">Guides</a>
+    <a href="https://resumesat.com/tools.html" class="nav-tools">🧰 Free tools</a>
+    <a href="https://resumesat.com/resume-checker-hindi.html" lang="hi">हिंदी</a>
     <button class="btn sm install-btn" id="installBtn" type="button" hidden>📲 Install app</button>
   </div>
 </div></nav>
@@ -492,6 +504,8 @@ code{font-family:var(--mono);background:var(--card2);border:1px solid var(--line
     </div>
   </div>
 </div></section>
+
+<section class="tstrip" aria-label="Free job search tools"><div class="wrap"><div class="tstrip-in"><b class="tlabel">More free tools</b><a href="https://resumesat.com/resume-job-match.html"><span aria-hidden="true">🎯</span>Resume vs job match</a><a href="https://resumesat.com/linkedin-profile-checker.html"><span aria-hidden="true">💼</span>LinkedIn profile checker</a><a href="https://resumesat.com/fresher-resume-builder.html"><span aria-hidden="true">🎓</span>Fresher resume builder</a><a href="https://resumesat.com/cover-letter-generator.html"><span aria-hidden="true">✉️</span>Cover letter</a><a href="https://resumesat.com/interview-questions-generator.html"><span aria-hidden="true">🗣️</span>Interview questions</a><a href="https://resumesat.com/salary-hike-calculator.html"><span aria-hidden="true">💰</span>Salary & in-hand calculator</a><a href="https://resumesat.com/job-application-tracker.html"><span aria-hidden="true">📋</span>Job tracker</a><a href="https://resumesat.com/notice-period-calculator.html"><span aria-hidden="true">📅</span>Notice period</a><a href="https://resumesat.com/resignation-letter-generator.html"><span aria-hidden="true">📝</span>Resignation letter</a><a href="https://resumesat.com/referral-message-generator.html"><span aria-hidden="true">🤝</span>Referral message</a><a class="all" href="https://resumesat.com/tools.html">All tools →</a></div></div></section>
 
 <section class="sec" id="guide"><div class="wrap">
   <div class="sec-head"><div><div class="kicker">Start here</div><h2>How to use it</h2><p>Six steps from your current resume to a finished file. The whole thing takes about ten minutes.</p></div></div>
@@ -1422,6 +1436,15 @@ function runSat(){
       </div>
       <div class="catbars">${R.cats.map(k=>`<button class="catbar" type="button" data-jump="cat-${k.id}"><b>${k.name}</b><span class="bar"><i style="width:${Math.round(k.score)}%;background:${colorFor(k.score)}"></i></span><span class="val">${k.passed}/${k.total} · ${Math.round(k.score)}</span></button>`).join('')}</div>
     </div>
+    <div class="panel"><h3 style="margin:0;">Next steps for your job search</h3>
+      <div class="nextsteps">
+        <a href="#clPanel" data-needs="ai" hidden><b>✉️ Write a cover letter</b><span>From this resume${R.J?' for this job':''}, in seconds.</span></a>
+        <a href="https://resumesat.com/interview-questions-generator.html"><b>🗣️ Interview questions</b><span>Likely questions for your role, with tips.</span></a>
+        <a href="https://resumesat.com/linkedin-profile-checker.html"><b>💼 Check your LinkedIn</b><span>Match your profile to this resume.</span></a>
+        <a href="https://resumesat.com/job-application-tracker.html"><b>📋 Track applications</b><span>Status and follow-up dates in one place.</span></a>
+        <a href="https://resumesat.com/salary-hike-calculator.html"><b>💰 Salary calculator</b><span>New CTC and monthly in-hand pay.</span></a>
+        <a href="https://resumesat.com/referral-message-generator.html"><b>🤝 Ask for a referral</b><span>A short LinkedIn or WhatsApp message.</span></a>
+      </div></div>
     ${catHtml}${locked}
     ${R.J ? jobChangesHtml(R.J) : ''}
     ${skillsPanelHtml(!!R.J)}
