@@ -2750,6 +2750,9 @@ const REVIEW_URL = AI_ON_SITE ? AI_ENDPOINT.replace(/\/+$/,'') + '/review' : '';
   });
 })();
 
+/* a free tool page on this site can hand over a resume and job description for the full check (same tab, never leaves the browser) */
+try{ const ho = sessionStorage.getItem('rsat_handoff'); if(ho){ sessionStorage.removeItem('rsat_handoff'); const o = JSON.parse(ho);
+  if(o && typeof o.resume==='string' && o.resume.trim().length>=40){ resumeEl.value = o.resume.slice(0,20000); if(typeof o.jd==='string') jdEl.value = o.jd.slice(0,12000); lastSampleJd=''; $('textWrap').open = true; setTimeout(()=>{ try{ toBench(); }catch(e){} }, 300); } } }catch(e){}
 /* show a report straight away when a draft was restored */
 syncEditor(); renderRack();
 if(resumeEl.value.trim().length>=40) runSat();
