@@ -9,7 +9,7 @@
 <meta name="description" content="Free ATS resume checker. Upload your resume and get a score from 29 checks, fix grammar, weak verbs and long bullets, rewrite it with AI, edit it live and download in 17 templates as Word or PDF. No sign-up.">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://resumesat.com/">
-<meta name="theme-color" content="#0C1621">
+<meta name="theme-color" content="#FBF7F3">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230C1621'/%3E%3Ccircle cx='32' cy='32' r='19' fill='none' stroke='%23E8591A' stroke-width='7'/%3E%3Cpath d='M24 33l6 6 11-13' fill='none' stroke='%23fff' stroke-width='6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Resume SAT">
@@ -27,17 +27,17 @@
 <!--GSC-VERIFY-->
 <script type="application/ld+json">[{"@context": "https://schema.org", "@type": "WebSite", "name": "Resume SAT", "alternateName": ["ResumeSAT", "resumesat", "resumesat.com"], "url": "https://resumesat.com/"}, {"@context": "https://schema.org", "@type": "WebApplication", "name": "Resume SAT", "alternateName": "Resume SAT ATS Resume Checker", "url": "https://resumesat.com/", "description": "Free ATS resume checker. Upload your resume and get a score from 29 checks, fix grammar, weak verbs and long bullets, rewrite it with AI, edit it live and download in 17 templates as Word or PDF. No sign-up.", "applicationCategory": "BusinessApplication", "operatingSystem": "Any (web browser)", "isAccessibleForFree": true, "offers": {"@type": "Offer", "price": "0", "priceCurrency": "INR"}, "featureList": ["ATS resume score from 29 checks", "Grammar, spelling and action-verb fixes", "Job description keyword and skills match", "Live resume editor", "17 resume templates", "Word and PDF download"]}, {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What is an ATS, and why should I care?", "acceptedAnswer": {"@type": "Answer", "text": "An applicant tracking system is the software most large companies use to collect applications. It converts your resume to text, stores it in fields and lets recruiters search and rank candidates. If it cannot read your file, or your resume lacks the job's keywords, a recruiter may never open it."}}, {"@type": "Question", "name": "What is a good score?", "acceptedAnswer": {"@type": "Answer", "text": "80 or above means the resume parses cleanly and reads well. 60 to 79 is a conditional pass with clear gaps to fix. No checker can give a certified ATS score, because every ATS product behaves differently, so use the number as a direction and the failed checks as your to-do list."}}, {"@type": "Question", "name": "Can an ATS read PDFs, columns, icons and charts?", "acceptedAnswer": {"@type": "Answer", "text": "Text PDFs and Word files are read well. Scanned or image-only PDFs are not read at all. Two-column layouts and tables are often read across the page, which mixes lines together. Icons, emoji, charts and skill bars are dropped or turned into stray characters, so write the information as plain text."}}, {"@type": "Question", "name": "Will the AI upgrade invent experience I do not have?", "acceptedAnswer": {"@type": "Answer", "text": "It is instructed to use only the facts in your resume and to leave a placeholder such as [X%] where a number is missing. Always read the preview before you use it, and replace every placeholder with a real figure."}}, {"@type": "Question", "name": "Why does my score change when I add a job description?", "acceptedAnswer": {"@type": "Answer", "text": "Without a job description, the score covers parsing, sections, content and red flags. Adding one unlocks four more checks (hard skills, soft skills, job title and keywords) and a job match percentage. If your resume lacks most of the skills the job asks for, the overall score is capped, because a well-written resume for the wrong job will still be filtered out. Paste the full job posting, not just the title, for an accurate match."}}, {"@type": "Question", "name": "Which template should I pick?", "acceptedAnswer": {"@type": "Answer", "text": "For job portals, pick one marked ATS-safe: Corporate Classic for MNC and banking roles, Tech MNC for IT, Core Engineering for power, EPC and manufacturing, Campus Fresher for graduates. Career Timeline and Monogram add a premium look and stay single-column. The two sidebar templates use two columns, which some ATS software mixes up, so keep those for emailing a recruiter directly or for print."}}, {"@type": "Question", "name": "Is my resume uploaded or stored anywhere?", "acceptedAnswer": {"@type": "Answer", "text": "Scoring, fixes, the editor and downloads run inside your browser. Only when you click an AI button is your resume text sent through the site server to Groq, an AI service, to be rewritten."}}, {"@type": "Question", "name": "Does it cost anything?", "acceptedAnswer": {"@type": "Answer", "text": "No. Everything is free and needs no account. The AI buttons use a free AI service with a daily limit."}}]}]</script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=optional" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 /* Layout idea: upload-first. A dark control-room hero holds the drop zone beside an annotated sample resume;
    below it a report (score card + check categories), a template rack, score explainer and FAQ on light paper. */
 :root{
-  --paper:#F1F3F6; --card:#FFFFFF; --card2:#F5F7FA; --ink:#121C27; --muted:#566575; --line:#D5DBE2;
+  --paper:#FBF7F3; --card:#FFFFFF; --card2:#F8F3EE; --ink:#121C27; --muted:#59636F; --line:#ECE2D8;
   --accent:#E8591A; --accent-ink:#FFFFFF; --steel:#1C5FB0; --teal:#0E7C86;
   --good:#17895A; --warn:#B57A0C; --bad:#CC4034;
-  --hero:#0C1621; --hero-2:#13212F; --hero-ink:#F1F5F9; --hero-muted:#9DB0C2; --hero-line:#22364A;
-  --display:'Big Shoulders Display','Arial Narrow',Impact,sans-serif;
-  --sans:'IBM Plex Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --hero:#FBF7F3; --hero-2:#FFFFFF; --hero-ink:#121C27; --hero-muted:#59636F; --hero-line:#ECE2D8;
+  --display:'Plus Jakarta Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --sans:'Plus Jakarta Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
   --mono:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;
   --shadow:0 1px 2px rgba(16,28,40,.06),0 10px 28px -14px rgba(16,28,40,.28);
   color-scheme:light;
@@ -45,11 +45,11 @@
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){ --paper:#0A1017; --card:#121B25; --card2:#18232F; --ink:#DFE7EE; --muted:#8798A9; --line:#27364A;
     --accent:#FF7A33; --accent-ink:#1A0C03; --steel:#66ABF4; --teal:#3FC4CE; --good:#3FC17E; --warn:#E8A33D; --bad:#F0695D;
-    --hero:#070D14; --hero-2:#101B27; --shadow:0 1px 2px rgba(0,0,0,.3),0 12px 30px -14px rgba(0,0,0,.7); color-scheme:dark; }
+    --hero:#070D14; --hero-2:#101B27; --hero-ink:#F1F5F9; --hero-muted:#9DB0C2; --hero-line:#22364A; --shadow:0 1px 2px rgba(0,0,0,.3),0 12px 30px -14px rgba(0,0,0,.7); color-scheme:dark; }
 }
 :root[data-theme="dark"]{ --paper:#0A1017; --card:#121B25; --card2:#18232F; --ink:#DFE7EE; --muted:#8798A9; --line:#27364A;
   --accent:#FF7A33; --accent-ink:#1A0C03; --steel:#66ABF4; --teal:#3FC4CE; --good:#3FC17E; --warn:#E8A33D; --bad:#F0695D;
-  --hero:#070D14; --hero-2:#101B27; --shadow:0 1px 2px rgba(0,0,0,.3),0 12px 30px -14px rgba(0,0,0,.7); color-scheme:dark; }
+  --hero:#070D14; --hero-2:#101B27; --hero-ink:#F1F5F9; --hero-muted:#9DB0C2; --hero-line:#22364A; --shadow:0 1px 2px rgba(0,0,0,.3),0 12px 30px -14px rgba(0,0,0,.7); color-scheme:dark; }
 
 *{box-sizing:border-box;}
 html{scroll-behavior:smooth;scroll-padding-top:76px;}
@@ -96,8 +96,8 @@ button,input,textarea{font:inherit;color:inherit;}
 @media (max-width:940px){.hero-in{grid-template-columns:1fr;}}
 .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.12em;color:var(--hero-muted);text-transform:uppercase;display:inline-flex;gap:9px;align-items:center;}
 .eyebrow::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 4px color-mix(in srgb,var(--accent) 25%,transparent);}
-.hero .h1-look{font-family:var(--display);font-weight:800;font-size:clamp(46px,6.6vw,88px);line-height:.93;text-transform:uppercase;margin:16px 0 16px;text-wrap:balance;letter-spacing:.005em;}
-.hero .h1-look em{font-style:normal;color:var(--accent);}
+.hero h1{font-family:var(--display);font-weight:800;font-size:clamp(46px,6.6vw,88px);line-height:.93;text-transform:uppercase;margin:16px 0 16px;text-wrap:balance;letter-spacing:.005em;}
+.hero h1 em{font-style:normal;color:var(--accent);}
 .hero .lead{font-size:17px;color:var(--hero-muted);max-width:54ch;margin:0 0 22px;}
 .drop{display:grid;gap:12px;justify-items:center;text-align:center;border:1.5px dashed color-mix(in srgb,var(--hero-ink) 45%,transparent);border-radius:14px;padding:24px 18px;background:color-mix(in srgb,var(--hero-2) 82%,transparent);cursor:pointer;transition:border-color .12s ease,background .12s ease;max-width:560px;}
 .drop:hover,.drop.over{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 12%,var(--hero-2));}
@@ -446,9 +446,92 @@ code{font-family:var(--mono);background:var(--card2);border:1px solid var(--line
 .foot{background:var(--hero);color:var(--hero-muted);border-top:1px solid var(--hero-line);}
 .foot .wrap{padding-block:18px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-family:var(--mono);font-size:11.5px;}
 .foot a{color:inherit;text-decoration:underline;text-underline-offset:2px;}
+
+/* ===== B2 light theme (Figma: Resume SAT – Redesign) ===== */
+.nav{background:color-mix(in srgb,var(--card) 82%,transparent);border-bottom:1px solid var(--line);color:var(--ink);}
+.logo{display:inline-flex;align-items:center;gap:9px;font-family:var(--sans);font-weight:800;font-size:21px;letter-spacing:-.01em;color:var(--ink);text-decoration:none;}
+.logo .mark{width:32px;height:32px;border-radius:10px;background:var(--accent);display:grid;place-items:center;}
+.nav-links a{color:var(--muted);font-weight:600;border-radius:99px;}
+.nav-links a:hover{color:var(--ink);background:var(--card2);}
+.nav-links a.nav-tools{border-radius:99px;padding-inline:14px;}
+.btn{border-radius:99px;font-weight:700;}
+.btn.sm{border-radius:99px;}
+.btn.lg{padding:15px 26px;}
+.panel{border-radius:18px;}
+.sec-head h2,.hero h1,.cta h2{text-transform:none;letter-spacing:-.025em;}
+.sec-head h2{font-size:clamp(28px,3.6vw,44px);line-height:1.12;}
+.sec-head.center{justify-content:center;text-align:center;}
+.kicker{font-family:var(--sans);font-weight:700;letter-spacing:.1em;}
+.panel > h3{font-family:var(--sans);font-weight:700;}
+.stamp,.gstep .no,.rail .no{font-family:var(--sans);}
+.hero{position:relative;overflow:hidden;color:var(--ink);background:
+  radial-gradient(520px 520px at 4% 0%,rgba(255,138,76,.38),transparent 70%),
+  radial-gradient(480px 480px at 96% 14%,rgba(110,168,255,.24),transparent 70%),
+  radial-gradient(400px 400px at 78% 100%,rgba(255,197,107,.32),transparent 70%),
+  linear-gradient(180deg,#FFE6D6 0%,#FFF6EF 55%,var(--paper) 100%);}
+.hero-in{display:flex;flex-direction:column;align-items:center;text-align:center;gap:0;padding-block:clamp(28px,4.5vw,60px) clamp(36px,5vw,64px);}
+.newpill{display:inline-flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--line);border-radius:99px;padding:5px 14px 5px 5px;font-size:13.5px;font-weight:600;color:var(--ink);text-decoration:none;box-shadow:0 6px 18px -12px rgba(18,28,39,.3);}
+.newpill b{background:var(--accent);color:#fff;border-radius:99px;padding:3px 9px;font-size:11px;letter-spacing:.06em;}
+.newpill:hover{border-color:var(--accent);}
+.hero .h1-look{font-family:var(--sans);font-weight:800;font-size:clamp(34px,5.4vw,66px);line-height:1.08;letter-spacing:-.025em;margin:8px auto 14px;max-width:16ch;text-wrap:balance;}
+.hero .h1-look em{font-style:normal;color:var(--accent);}
+.hero h1.h1-kw{font-family:var(--sans);font-size:13px;line-height:1.3;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin:18px 0 0;}
+.hero .lead{font-size:clamp(16px,1.6vw,19px);color:var(--muted);max-width:56ch;margin:0 auto 26px;}
+.upcard{position:relative;width:min(100%,760px);background:var(--card);border-radius:28px;padding:clamp(14px,2.4vw,26px);box-shadow:0 24px 60px -18px rgba(232,89,26,.28),0 2px 6px rgba(18,28,39,.05);text-align:center;}
+.drop{border:2px dashed color-mix(in srgb,var(--accent) 45%,transparent);background:color-mix(in srgb,var(--accent) 5%,var(--card));border-radius:20px;padding:clamp(22px,3.4vw,34px) 18px;gap:10px;}
+.drop:hover,.drop.over{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,var(--card));}
+.drop .ic{width:58px;height:58px;border-radius:99px;}
+.upcard .drop{width:100%;max-width:none;}
+.logo{white-space:nowrap;}
+@media (max-width:640px){.logo{font-size:18px;gap:7px;}.logo .mark{width:28px;height:28px;}.newpill{font-size:12.5px;}}
+.drop b{font-size:clamp(18px,2vw,22px);font-weight:800;color:var(--ink);}
+.drop small{font-size:14px;color:var(--muted);}
+.up-row{display:flex;gap:10px 16px;align-items:center;justify-content:center;flex-wrap:wrap;margin-top:14px;}
+.jdhint{font-size:14px;font-weight:600;color:var(--muted);text-decoration:none;}
+.jdhint:hover{color:var(--accent);}
+.hero .status{color:var(--muted);margin:10px auto 0;min-height:1.4em;max-width:100%;}
+.hero .status.ok{color:var(--good);} .hero .status.err{color:var(--bad);}
+.hero-fine{justify-content:center;margin:18px auto 0;color:var(--muted);font-weight:600;}
+.hero-fine span::before{content:"✓ ";color:var(--good);}
+.hero-fine a{color:var(--ink);}
+.fbadge{position:absolute;display:flex;gap:10px;align-items:center;background:var(--card);border-radius:16px;padding:10px 16px 10px 12px;box-shadow:0 16px 40px -10px rgba(18,28,39,.22);text-align:left;pointer-events:none;}
+.fbadge i{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;}
+.fbadge i.g{background:#E4F4EC;} .fbadge i.b{background:#E6EEF9;} .fbadge i.o{background:#FFF1E8;}
+.fbadge b{display:block;font-size:15px;font-weight:800;color:var(--ink);} .fbadge small{display:block;font-size:12px;color:var(--muted);}
+.fbadge.f1{left:-170px;top:48px;transform:rotate(4deg);} .fbadge.f2{right:-180px;top:24px;transform:rotate(-4deg);} .fbadge.f3{right:-150px;bottom:40px;transform:rotate(3deg);}
+@media (max-width:1180px){.fbadge{display:none;}}
+.b2ba{background:linear-gradient(180deg,var(--paper),var(--card));}
+.bapair{display:grid;grid-template-columns:1fr auto 1fr;gap:20px;align-items:center;}
+.bacard{background:var(--card);border-radius:22px;padding:22px 24px;border:1.5px solid;box-shadow:0 14px 36px -16px rgba(18,28,39,.18);}
+.bacard.bad{border-color:color-mix(in srgb,var(--bad) 35%,transparent);} .bacard.good{border-color:color-mix(in srgb,var(--good) 35%,transparent);}
+.batop{display:flex;justify-content:space-between;align-items:center;}
+.batop .tag{font-size:12px;font-weight:700;letter-spacing:.08em;padding:4px 10px;border-radius:99px;}
+.bacard.bad .tag{background:color-mix(in srgb,var(--bad) 12%,transparent);color:var(--bad);} .bacard.good .tag{background:color-mix(in srgb,var(--good) 12%,transparent);color:var(--good);}
+.batop b{font-size:21px;font-weight:800;} .bacard.bad .batop b{color:var(--bad);} .bacard.good .batop b{color:var(--good);}
+.bacard p{font-size:clamp(16px,1.6vw,19px);font-weight:600;line-height:1.45;margin:14px 0;}
+.bacard .chips{display:flex;flex-wrap:wrap;gap:8px;}
+.bacard .chips span{font-size:12.5px;font-weight:600;padding:5px 11px;border-radius:99px;}
+.bacard.bad .chips span{background:color-mix(in srgb,var(--bad) 10%,transparent);color:var(--bad);} .bacard.good .chips span{background:color-mix(in srgb,var(--good) 10%,transparent);color:var(--good);}
+.baarrow{width:50px;height:50px;border-radius:99px;background:var(--accent);color:#fff;display:grid;place-items:center;font-size:22px;font-weight:800;box-shadow:0 10px 24px -8px var(--accent);}
+.bafoot{text-align:center;color:var(--muted);margin:22px auto 0;max-width:62ch;}
+@media (max-width:760px){.bapair{grid-template-columns:1fr;}.baarrow{justify-self:center;transform:rotate(90deg);}}
+.pgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+@media (max-width:860px){.pgrid{grid-template-columns:1fr;}}
+.pcard{border-radius:22px;padding:26px;display:flex;flex-direction:column;gap:8px;}
+.pcard.p0{background:linear-gradient(180deg,#FFE2D1,#FFF6F0);} .pcard.p1{background:linear-gradient(180deg,#DCE8FA,#F4F8FE);} .pcard.p2{background:linear-gradient(180deg,#D9F1E5,#F3FBF7);}
+.pcard i{width:48px;height:48px;border-radius:14px;background:#fff;display:grid;place-items:center;margin-bottom:6px;}
+.pcard h3{margin:0;font-size:22px;font-weight:800;color:#121C27;} .pcard p{margin:0 0 6px;color:#59636F;}
+.pcard a{font-weight:700;font-size:14.5px;color:#121C27;text-decoration:none;} .pcard a:hover{text-decoration:underline;}
+.cta{background:linear-gradient(100deg,#121C27 0%,#3A1E14 62%,#E8591A 100%);color:#F1F5F9;}
+.cta p{color:#C9D3DD;}
+.foot{background:#121C27;color:#9DB0C2;border-top:0;}
+.tstrip{background:var(--card);}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .hero{background:radial-gradient(520px 520px at 4% 0%,rgba(255,122,51,.22),transparent 70%),radial-gradient(480px 480px at 96% 14%,rgba(102,171,244,.16),transparent 70%),linear-gradient(180deg,#1A120D,var(--paper));}
+  :root:not([data-theme="light"]) .pcard h3,:root:not([data-theme="light"]) .pcard a{color:#121C27;} }
+:root[data-theme="dark"] .hero{background:radial-gradient(520px 520px at 4% 0%,rgba(255,122,51,.22),transparent 70%),linear-gradient(180deg,#1A120D,var(--paper));}
 </style>
 <link rel="manifest" href="/manifest.webmanifest">
-<meta name="theme-color" content="#0C1621">
+<meta name="theme-color" content="#FBF7F3">
 <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="48x48" href="/icons/favicon-48.png">
 <meta name="apple-mobile-web-app-title" content="Resume SAT">
@@ -456,7 +539,7 @@ code{font-family:var(--mono);background:var(--card2);border:1px solid var(--line
 <body>
 <div class="notice" role="note"><div class="wrap"><span>Please leave a review if you face any problems! It helps us fix them fast.</span><a href="#reviews">Write a review</a></div></div>
 <nav class="nav"><div class="wrap">
-  <div class="logo">RESUME<span>·</span>SAT</div>
+  <a class="logo" href="./" aria-label="Resume SAT home"><i class="mark" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4M10 13H8M16 17H8"/></svg></i>Resume SAT</a>
   <div class="nav-links">
     <a href="#guide">How to use</a>
     <a class="opt" href="#bench">Report</a>
@@ -473,41 +556,38 @@ code{font-family:var(--mono);background:var(--card2);border:1px solid var(--line
 </div></nav>
 
 <section class="hero"><div class="wrap hero-in">
-  <div>
-    <h1 class="eyebrow" style="margin:0;">Free ATS resume checker</h1>
-    <p class="h1-look">Will your resume pass the <em>machine</em>?</p>
-    <p class="lead">Upload it and get a score from 29 checks on parsing, sections, content, job match and red flags. Fix what fails, then download it in an ATS-safe template.</p>
+  <a class="newpill" href="https://resumesat.com/tools.html"><b>NEW</b>LinkedIn checker, salary calculator and 8 more free tools</a>
+  <h1 class="h1-kw">Free ATS resume checker</h1>
+  <p class="h1-look">Get your resume past the software, and <em>into human hands</em></p>
+  <p class="lead">Free ATS resume check in 10 seconds. See your score, fix what fails, download a clean resume. No sign-up.</p>
+  <div class="upcard">
     <label class="drop" id="drop" for="resumeFile">
-      <span class="ic" aria-hidden="true">↑</span>
-      <b>Drop your resume here or choose a file</b>
-      <small>PDF or DOCX is best · TXT or a photo also works · up to 8 MB</small>
-      <span class="btn primary lg fake">Upload your resume</span>
+      <span class="ic" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg></span>
+      <b>Drag &amp; drop your resume</b>
+      <small>PDF, Word or a phone photo · up to 8 MB</small>
+      <span class="btn primary lg fake">Upload resume →</span>
     </label>
     <input class="vh" type="file" id="resumeFile" accept=".pdf,.docx,.txt,.jpg,.jpeg,.png,.webp,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain,image/jpeg,image/png,image/webp">
+    <div class="up-row"><button type="button" id="sampleBtn" class="btn">Try a sample resume</button><a class="jdhint" href="#bench">Optional: add the job description for a match score →</a></div>
     <div class="status" id="uploadStatus" aria-live="polite"></div>
-    <div class="hero-fine"><span>Checked in your browser, not uploaded to a server</span><span>No sign-up for scoring and templates</span><button type="button" id="sampleBtn">Try it with a sample resume</button><a href="#guide" style="color:var(--hero-ink);">New here? See the 6 steps</a></div>
+    <div class="fbadge f1" aria-hidden="true"><i class="g"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#17895A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 7 13.5 15.5 8.5 10.5 2 17"/><path d="M16 7h6v6"/></svg></i><span><b>+31 points</b><small>after quick fixes</small></span></div>
+    <div class="fbadge f2" aria-hidden="true"><i class="b"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1C5FB0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></i><span><b>Job match 82%</b><small>add the job post to see yours</small></span></div>
+    <div class="fbadge f3" aria-hidden="true"><i class="o"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E8591A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg></i><span><b>ATS can read it</b><small>single column, clean text</small></span></div>
   </div>
-  <div class="viz" aria-label="Sample of an annotated resume">
-    <span class="sample-mark">SAMPLE REPORT</span>
-    <div class="sheet" aria-hidden="true">
-      <b class="nm">AARAV MEHTA</b><i class="s"></i>
-      <i class="h"></i><i></i><i class="m"></i>
-      <i class="h"></i><i class="hl"></i><i class="m hl"></i><i class="ok"></i><i class="s"></i><i class="m"></i>
-      <i class="h"></i><i class="m"></i><i class="s"></i>
-      <i class="h"></i><i></i><i class="s"></i>
-    </div>
-    <span class="tagc t1">Weak phrase: "responsible for"</span>
-    <span class="tagc w t2">No number in this bullet</span>
-    <span class="tagc g t3">Single column, parses cleanly</span>
-    <div class="dial">
-      <div class="gauge sm"><svg viewBox="0 0 132 132"><circle class="track" cx="66" cy="66" r="54"/><circle class="fill" cx="66" cy="66" r="54" stroke="var(--warn)" stroke-dasharray="339.3" stroke-dashoffset="91.6"/></svg>
-        <div class="gauge-num"><span class="n">73</span></div></div>
-      <div><b>22 of 29 checks passed</b><small>CONDITIONAL PASS</small></div>
-    </div>
-  </div>
+  <div class="hero-fine"><span>Never stored on a server</span><span>No sign-up</span><span>17 ATS-safe templates</span><a href="#guide">New here? See the 6 steps</a></div>
 </div></section>
 
 <section class="tstrip" aria-label="Free job search tools"><div class="wrap"><div class="tstrip-in"><b class="tlabel">More free tools</b><a href="https://resumesat.com/resume-job-match.html"><span aria-hidden="true">🎯</span>Resume vs job match</a><a href="https://resumesat.com/linkedin-profile-checker.html"><span aria-hidden="true">💼</span>LinkedIn profile checker</a><a href="https://resumesat.com/fresher-resume-builder.html"><span aria-hidden="true">🎓</span>Fresher resume builder</a><a href="https://resumesat.com/cover-letter-generator.html"><span aria-hidden="true">✉️</span>Cover letter</a><a href="https://resumesat.com/interview-questions-generator.html"><span aria-hidden="true">🗣️</span>Interview questions</a><a href="https://resumesat.com/salary-hike-calculator.html"><span aria-hidden="true">💰</span>Salary & in-hand calculator</a><a href="https://resumesat.com/job-application-tracker.html"><span aria-hidden="true">📋</span>Job tracker</a><a href="https://resumesat.com/notice-period-calculator.html"><span aria-hidden="true">📅</span>Notice period</a><a href="https://resumesat.com/resignation-letter-generator.html"><span aria-hidden="true">📝</span>Resignation letter</a><a href="https://resumesat.com/referral-message-generator.html"><span aria-hidden="true">🤝</span>Referral message</a><a class="all" href="https://resumesat.com/tools.html">All tools →</a></div></div></section>
+
+<section class="sec b2ba" aria-label="Before and after example"><div class="wrap">
+  <div class="sec-head center"><div><div class="kicker">See the difference</div><h2>One bullet, before and after</h2></div></div>
+  <div class="bapair">
+    <div class="bacard bad"><div class="batop"><span class="tag">BEFORE</span><b>41 / 100</b></div><p>• Responsible for SCADA work and site visits.</p><div class="chips"><span>✕ Weak phrase</span><span>✕ No number</span><span>✕ No result</span></div></div>
+    <span class="baarrow" aria-hidden="true">→</span>
+    <div class="bacard good"><div class="batop"><span class="tag">AFTER</span><b>86 / 100</b></div><p>• Commissioned SCADA for 4 metro rail lines and cut signal integration time by 20%.</p><div class="chips"><span>✓ Strong action verb</span><span>✓ Number and result</span><span>✓ Job keyword</span></div></div>
+  </div>
+  <p class="bafoot">“Apply all quick fixes” and the AI rewrite do this for every bullet, using only facts from your resume.</p>
+</div></section>
 
 <section class="sec" id="guide"><div class="wrap">
   <div class="sec-head"><div><div class="kicker">Start here</div><h2>How to use it</h2><p>Six steps from your current resume to a finished file. The whole thing takes about ten minutes.</p></div></div>
@@ -663,6 +743,11 @@ code{font-family:var(--mono);background:var(--card2);border:1px solid var(--line
       <div class="exp"><h3>Privacy</h3><p>Your review goes only to the site owner. Your name and email are optional and are used only to reply to you. Your resume is never sent with a review.</p></div>
     </div>
   </div>
+</div></section>
+
+<section class="sec alt personas" aria-label="Made for every stage"><div class="wrap">
+  <div class="sec-head center"><div><div class="kicker">Made for every stage</div><h2>Wherever you are in your career</h2></div></div>
+  <div class="pgrid"><div class="pcard p0"><i><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#E8591A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></i><h3>Freshers</h3><p>No experience? Build a resume from your projects, internship and skills.</p><a href="https://resumesat.com/fresher-resume-builder.html">✓ Fresher resume builder</a><a href="https://resumesat.com/interview-questions-generator.html">✓ Interview questions</a></div><div class="pcard p1"><i><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1C5FB0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="7" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></i><h3>Switching jobs</h3><p>Match your resume to each job post and track every application.</p><a href="https://resumesat.com/resume-job-match.html">✓ Resume vs job match</a><a href="https://resumesat.com/salary-hike-calculator.html">✓ Salary & notice period</a></div><div class="pcard p2"><i><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#17895A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/></svg></i><h3>Growing your career</h3><p>Sharpen LinkedIn, write cover letters and ask for referrals.</p><a href="https://resumesat.com/linkedin-profile-checker.html">✓ LinkedIn checker</a><a href="https://resumesat.com/referral-message-generator.html">✓ Referral messages</a></div></div>
 </div></section>
 
 <section class="sec" id="guidesHome"><div class="wrap">
