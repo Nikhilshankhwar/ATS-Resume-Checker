@@ -1,0 +1,22 @@
+{
+  "name": "Resume SAT – Free ATS Resume Checker",
+  "short_name": "Resume SAT",
+  "description": "Check your resume's ATS score, fix it and download it in 17 templates. Free, no sign-up.",
+  "id": "/",
+  "start_url": "/?source=app",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#0C1621",
+  "theme_color": "#0C1621",
+  "lang": "en-IN",
+  "categories": ["business", "productivity", "education"],
+  "icons": [
+    {"src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
+    {"src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"},
+    {"src": "/icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
+  ],
+  "shortcuts": [
+    {"name": "Resume guides", "url": "/guides.html", "icons": [{"src": "/icons/icon-192.png", "sizes": "192x192"}]}
+  ]
+}

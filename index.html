@@ -195,6 +195,7 @@ details.textwrap .in{padding:0 10px 10px;}
 .gcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;}
 .gcards a{display:block;border:1px solid var(--line);border-radius:10px;padding:14px 16px;text-decoration:none;color:var(--ink);background:var(--card,#fff);}
 .gcards a:hover{border-color:var(--accent);} .gcards b{display:block;margin-bottom:4px;font-size:15px;} .gcards span{color:var(--muted);font-size:13.5px;}
+.install-btn{margin-left:6px;border-color:var(--accent);color:var(--accent);background:transparent;}
 .fixnote{margin:10px 0 0;padding:8px 12px;border-radius:8px;background:#EAF7F0;border:1px solid #BFE5CF;color:#155C36;font-size:13.5px;}
 .share{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;margin-top:12px;padding-top:12px;border-top:1px dashed var(--line);font-size:13px;color:var(--muted);}
 .share .btn{text-decoration:none;} .share .sh-wa{border-color:#25D366;color:#128C4A;} .share .sh-li{border-color:#0A66C2;color:#0A66C2;}
@@ -433,6 +434,11 @@ code{font-family:var(--mono);background:var(--card2);border:1px solid var(--line
 .foot .wrap{padding-block:18px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-family:var(--mono);font-size:11.5px;}
 .foot a{color:inherit;text-decoration:underline;text-underline-offset:2px;}
 </style>
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="theme-color" content="#0C1621">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="48x48" href="/icons/favicon-48.png">
+<meta name="apple-mobile-web-app-title" content="Resume SAT">
 </head>
 <body>
 <div class="notice" role="note"><div class="wrap"><span>Please leave a review if you face any problems! It helps us fix them fast.</span><a href="#reviews">Write a review</a></div></div>
@@ -447,6 +453,7 @@ code{font-family:var(--mono);background:var(--card2);border:1px solid var(--line
     <a href="#reviews">Reviews</a>
     <a href="#faq" class="opt">FAQ</a>
     <a href="guides.html">Guides</a>
+    <button class="btn sm install-btn" id="installBtn" type="button" hidden>📲 Install app</button>
   </div>
 </div></nav>
 
@@ -2657,6 +2664,16 @@ const REVIEW_URL = AI_ON_SITE ? AI_ENDPOINT.replace(/\/+$/,'') + '/review' : '';
 /* show a report straight away when a draft was restored */
 syncEditor(); renderRack();
 if(resumeEl.value.trim().length>=40) runSat();
+
+/* ---------- installable app (PWA): register the service worker and offer "Install app" ---------- */
+if(STANDALONE){
+  try{ if('serviceWorker' in navigator && location.protocol==='https:') window.addEventListener('load', ()=> navigator.serviceWorker.register('/sw.js').catch(()=>{})); }catch(e){}
+  let installEvt = null;
+  window.addEventListener('beforeinstallprompt', e=>{ e.preventDefault(); installEvt = e; const b = $('installBtn'); if(b) b.hidden = false; });
+  window.addEventListener('appinstalled', ()=>{ installEvt = null; const b = $('installBtn'); if(b) b.hidden = true; });
+  const ib = $('installBtn');
+  if(ib) ib.addEventListener('click', async ()=>{ if(!installEvt) return; installEvt.prompt(); try{ await installEvt.userChoice; }catch(e){} installEvt = null; ib.hidden = true; });
+}
 
 </script>
 <!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "441234361fd74e6c90bfe76dff67f2ab"}'></script><!-- End Cloudflare Web Analytics -->
