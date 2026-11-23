@@ -63,7 +63,7 @@ button.btn.primary{background:var(--accent);border-color:var(--accent);color:#ff
 </div>
 <div class="grid2">
 <div><label class="lbl" for="d">Date of interview, application or joining <span class="hint small">(optional)</span></label><input id="d" type="date"></div>
-<div><label class="lbl" for="x">One detail to mention <span class="hint small">(optional)</span></label><input id="x" placeholder="e.g. the metro SCADA project we discussed"></div>
+<div><label class="lbl" for="x">One detail to mention <span class="hint small">(optional)</span></label><input id="x" placeholder="e.g. the new store launch we discussed"></div>
 </div>
 <div class="row"><button class="btn primary" type="button" id="go">Make my email</button><button class="btn" type="button" id="ai">✨ Personalise with AI</button></div>
 <div id="out"></div>
@@ -116,7 +116,7 @@ function mail(v){
   return `Subject: ${s}\n\n${hi}\n\n${b}\n\nThank you.\n\nRegards,\n${v.n}`;
 }
 $('go').onclick = () => showText($('out'), 'mail', 'Your email', mail(vals()));
-const XL = {thanks:['One detail to mention','e.g. the metro SCADA project we discussed'], nofb:['One detail to mention','e.g. the metro SCADA project we discussed'], applied:['One line about you','e.g. I have 3 years of RTU commissioning experience'], accept:['Anything to confirm','e.g. I have signed and attached the offer letter'], decline:['Reason','e.g. I have accepted another offer closer to home'], nego:['Your expected figure','e.g. ₹12 lakh a year']};
+const XL = {thanks:['One detail to mention','e.g. the new store launch we discussed'], nofb:['One detail to mention','e.g. the new store launch we discussed'], applied:['One line about you','e.g. I have 3 years of B2B sales experience'], accept:['Anything to confirm','e.g. I have signed and attached the offer letter'], decline:['Reason','e.g. I have accepted another offer closer to home'], nego:['Your expected figure','e.g. ₹12 lakh a year']};
 $('ty').onchange = () => { const [l,ph] = XL[$('ty').value]; document.querySelector('label[for=x]').innerHTML = l + ' <span class="hint small">(optional)</span>'; $('x').placeholder = ph; };
 $('ai').onclick = () => { const v = vals(), o = $('out'); if(!$('mail')) showText(o, 'mail', 'Your email', mail(v));
   const what = $('ty').options[$('ty').selectedIndex].text;
