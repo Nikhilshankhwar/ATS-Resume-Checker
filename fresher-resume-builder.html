@@ -80,7 +80,7 @@ button.btn.primary{background:var(--accent);border-color:var(--accent);color:#ff
 </fieldset>
 <div class="row"><button class="btn primary" type="button" id="go">Build my resume</button></div>
 <div id="out"></div>
-<section class="faq"><h2>Questions</h2><h3>What should a fresher put on a resume?</h3><p>Your education, technical skills, 1–3 projects with what you did and the result, any internship or training, certifications and achievements. A short summary at the top says which job you want. One page is enough.</p><h3>Should a fresher write an objective or a summary?</h3><p>A 2–3 line summary is better than a generic objective. Say your degree, the role you want and your strongest skills or project.</p><h3>Should I add Class 10 and 12 marks?</h3><p>Many Indian recruiters still look at them for freshers, especially for campus and PSU roles. Add them if they are good; leave them out after a few years of experience.</p><h3>How do I download it?</h3><p>Press <b>Build my resume</b>, then <b>Choose a template and download</b>. It opens in the Resume SAT checker, where you can pick one of 17 templates and download a PDF or Word file.</p></section><div class="cta"><b>Next: check your full resume.</b> Get an ATS score from 29 checks and download it in 17 templates. Free, no sign-up. <a class="btn" href="./">Check my resume →</a></div><script>
+<section class="faq"><h2>Questions</h2><h3>What should a fresher put on a resume?</h3><p>Your education, technical skills, 1–3 projects with what you did and the result, any internship or training, certifications and achievements. A short summary at the top says which job you want. One page is enough.</p><h3>Should a fresher write an objective or a summary?</h3><p>A 2–3 line summary is better than a generic objective. Say your degree, the role you want and your strongest skills or project.</p><h3>Should I add Class 10 and 12 marks?</h3><p>Many Indian recruiters still look at them for freshers, especially for campus and PSU roles. Add them if they are good; leave them out after a few years of experience.</p><h3>How do I download it?</h3><p>Press <b>Build my resume</b>, then <b>Choose a template and download</b>. It opens in the Resume SAT checker, where you can pick one of 18 templates and download a PDF or Word file.</p></section><div class="cta"><b>Next: check your full resume.</b> Get an ATS score from 29 checks and download it in 18 templates. Free, no sign-up. <a class="btn" href="./">Check my resume →</a></div><script>
 const AI_URL = 'https://resume-sat-ai.nickshankhwar123.workers.dev';
 const $ = id => document.getElementById(id);
 const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -135,7 +135,7 @@ $('go').onclick = () => {
   const t = build();
   o.innerHTML = `<div class="res"><h3>Your resume text</h3><textarea id="rt" rows="18">${esc(t)}</textarea>
    <div class="row"><button class="btn primary" type="button" id="open">Choose a template and download →</button>${copyBtn('rt')}</div>
-   <p class="hint small">Opens in the Resume SAT checker in this tab: you get an ATS score, can edit every line, and download in 17 templates (PDF or Word).</p></div>`;
+   <p class="hint small">Opens in the Resume SAT checker in this tab: you get an ATS score, can edit every line, and download in 18 templates (PDF or Word).</p></div>`;
   $('open').onclick = () => openChecker($('rt').value, '');
 };
 </script></div></main>
