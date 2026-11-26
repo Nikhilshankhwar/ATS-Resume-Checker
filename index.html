@@ -9,7 +9,7 @@
 <meta name="description" content="Free ATS resume checker: get a score from 29 checks, fix weak lines with AI, edit live and download in 18 Word or PDF templates. No sign-up needed.">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://resumesat.com/">
-<meta name="theme-color" content="#FBF7F3">
+<meta name="theme-color" content="#F4F7F6">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230C1621'/%3E%3Ccircle cx='32' cy='32' r='19' fill='none' stroke='%23E8591A' stroke-width='7'/%3E%3Cpath d='M24 33l6 6 11-13' fill='none' stroke='%23fff' stroke-width='6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Resume SAT">
@@ -32,10 +32,10 @@
 /* Layout idea: upload-first. A dark control-room hero holds the drop zone beside an annotated sample resume;
    below it a report (score card + check categories), a template rack, score explainer and FAQ on light paper. */
 :root{
-  --paper:#FBF7F3; --card:#FFFFFF; --card2:#F8F3EE; --ink:#121C27; --muted:#59636F; --line:#ECE2D8;
-  --accent:#E8591A; --accent-ink:#FFFFFF; --steel:#1C5FB0; --teal:#0E7C86;
+  --paper:#F4F7F6; --card:#FFFFFF; --card2:#EEF4F2; --ink:#14201F; --muted:#55615F; --line:#DCE6E3;
+  --accent:#0F6E66; --accent-ink:#FFFFFF; --steel:#1C5FB0; --teal:#0F6E66;
   --good:#17895A; --warn:#B57A0C; --bad:#CC4034;
-  --hero:#FBF7F3; --hero-2:#FFFFFF; --hero-ink:#121C27; --hero-muted:#59636F; --hero-line:#ECE2D8;
+  --hero:#F4F7F6; --hero-2:#FFFFFF; --hero-ink:#14201F; --hero-muted:#55615F; --hero-line:#DCE6E3;
   --display:'Plus Jakarta Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
   --sans:'Plus Jakarta Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
   --mono:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;
@@ -44,11 +44,11 @@
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){ --paper:#0A1017; --card:#121B25; --card2:#18232F; --ink:#DFE7EE; --muted:#8798A9; --line:#27364A;
-    --accent:#FF7A33; --accent-ink:#1A0C03; --steel:#66ABF4; --teal:#3FC4CE; --good:#3FC17E; --warn:#E8A33D; --bad:#F0695D;
+    --accent:#3DBDAE; --accent-ink:#04231F; --steel:#66ABF4; --teal:#3FC4CE; --good:#3FC17E; --warn:#E8A33D; --bad:#F0695D;
     --hero:#070D14; --hero-2:#101B27; --hero-ink:#F1F5F9; --hero-muted:#9DB0C2; --hero-line:#22364A; --shadow:0 1px 2px rgba(0,0,0,.3),0 12px 30px -14px rgba(0,0,0,.7); color-scheme:dark; }
 }
 :root[data-theme="dark"]{ --paper:#0A1017; --card:#121B25; --card2:#18232F; --ink:#DFE7EE; --muted:#8798A9; --line:#27364A;
-  --accent:#FF7A33; --accent-ink:#1A0C03; --steel:#66ABF4; --teal:#3FC4CE; --good:#3FC17E; --warn:#E8A33D; --bad:#F0695D;
+  --accent:#3DBDAE; --accent-ink:#04231F; --steel:#66ABF4; --teal:#3FC4CE; --good:#3FC17E; --warn:#E8A33D; --bad:#F0695D;
   --hero:#070D14; --hero-2:#101B27; --hero-ink:#F1F5F9; --hero-muted:#9DB0C2; --hero-line:#22364A; --shadow:0 1px 2px rgba(0,0,0,.3),0 12px 30px -14px rgba(0,0,0,.7); color-scheme:dark; }
 
 *{box-sizing:border-box;}
@@ -105,16 +105,16 @@ button,input,textarea{font:inherit;color:inherit;}
 .drop b{font-size:17px;}
 .drop small{font-size:13px;color:var(--hero-muted);}
 .drop .fake{pointer-events:none;}
-.nav-links a.nav-tools{color:#fff;background:var(--accent,#E8590C);font-weight:600;}.nav-links a.nav-tools:hover{background:var(--accent,#E8590C);filter:brightness(1.08);color:#fff;}
+.nav-links a.nav-tools{color:#fff;background:var(--accent,#0F6E66);font-weight:600;}.nav-links a.nav-tools:hover{background:var(--accent,#0F6E66);filter:brightness(1.08);color:#fff;}
 .tstrip{background:var(--card,#fff);border-bottom:1px solid var(--line);}
 .tstrip-in{display:flex;gap:8px;align-items:center;overflow-x:auto;padding:14px 0;scrollbar-width:thin;}
 .tstrip-in .tlabel{flex:none;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-right:4px;}
 .tstrip-in a{flex:none;display:inline-flex;gap:6px;align-items:center;padding:8px 13px;border:1px solid var(--line);border-radius:99px;font-size:14px;font-weight:600;color:var(--ink);text-decoration:none;background:var(--card2,#F6F8FA);white-space:nowrap;}
-.tstrip-in a:hover{border-color:var(--accent,#E8590C);color:var(--accent,#E8590C);}.tstrip-in a.all{background:none;border-style:dashed;}
+.tstrip-in a:hover{border-color:var(--accent,#0F6E66);color:var(--accent,#0F6E66);}.tstrip-in a.all{background:none;border-style:dashed;}
 @media (min-width:1100px){.tstrip-in{flex-wrap:wrap;overflow:visible;}}
 .nextsteps{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px;margin-top:10px;}
 .nextsteps a{display:block;border:1px solid var(--line);border-radius:10px;padding:11px 13px;text-decoration:none;color:var(--ink);background:var(--card2,#F6F8FA);}
-.nextsteps a b{display:block;font-size:14px;}.nextsteps a span{font-size:12.5px;color:var(--muted);}.nextsteps a:hover{border-color:var(--accent,#E8590C);}
+.nextsteps a b{display:block;font-size:14px;}.nextsteps a span{font-size:12.5px;color:var(--muted);}.nextsteps a:hover{border-color:var(--accent,#0F6E66);}
 .hero-fine{display:flex;gap:8px 18px;flex-wrap:wrap;margin-top:14px;font-size:13px;color:var(--hero-muted);max-width:560px;}
 .hero-fine span::before{content:"✓ ";color:var(--good);font-weight:700;}
 .hero-fine button{background:none;border:none;color:var(--hero-ink);text-decoration:underline;cursor:pointer;padding:0;font-size:13px;}
@@ -129,7 +129,7 @@ button,input,textarea{font:inherit;color:inherit;}
 .sheet b.nm{font-size:17px;letter-spacing:.02em;}
 .sheet i{display:block;height:5px;border-radius:3px;background:#d9dfe5;}
 .sheet i.s{width:64%;} .sheet i.m{width:82%;} .sheet i.h{height:6px;width:34%;background:#1c2733;margin-top:5%;}
-.sheet i.hl{background:color-mix(in srgb,#E8591A 45%,#fff);} .sheet i.ok{background:color-mix(in srgb,#17895A 40%,#fff);}
+.sheet i.hl{background:color-mix(in srgb,#0F6E66 30%,#fff);} .sheet i.ok{background:color-mix(in srgb,#17895A 40%,#fff);}
 .tagc{position:absolute;font-family:var(--mono);font-size:11.5px;font-weight:600;padding:6px 10px;border-radius:8px;background:var(--card);color:var(--ink);box-shadow:var(--shadow);display:flex;gap:7px;align-items:center;white-space:nowrap;}
 .tagc::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--bad);}
 .tagc.w::before{background:var(--warn);} .tagc.g::before{background:var(--good);}
@@ -567,9 +567,43 @@ code{font-family:var(--mono);background:var(--card2);border:1px solid var(--line
 .cta::before{content:"";position:absolute;left:50%;top:40%;width:760px;max-width:90%;height:240px;transform:translate(-50%,-50%);border-radius:999px;background:linear-gradient(90deg,rgba(34,211,238,.35),rgba(139,92,246,.45),rgba(255,107,44,.35));filter:blur(90px);pointer-events:none;}
 .cta .wrap{position:relative;}
 @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .hero{background-image:linear-gradient(rgba(139,156,255,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(139,156,255,.07) 1px,transparent 1px),radial-gradient(520px 520px at 4% 0%,rgba(139,92,246,.30),transparent 70%),radial-gradient(480px 480px at 96% 14%,rgba(34,211,238,.18),transparent 70%),linear-gradient(180deg,#120E1C,var(--paper));} }
+
+/* ===== calm teal theme (overrides the bright gradients and glows above) ===== */
+.hero{background:linear-gradient(180deg,#E3F0EC 0%,#EEF5F3 55%,var(--paper) 100%);background-size:auto;}
+.hero .h1-look em{background:none;-webkit-background-clip:initial;background-clip:initial;color:var(--accent);}
+.upcard{border:1px solid var(--line);box-shadow:0 1px 2px rgba(16,40,36,.05),0 22px 48px -28px rgba(16,40,36,.30);}
+.scanbeam{background:linear-gradient(180deg,rgba(15,110,102,0),rgba(15,110,102,.07));border-bottom:2px solid rgba(15,110,102,.30);box-shadow:none;animation-duration:4.5s;}
+.btn.primary{box-shadow:none;} .btn.primary:hover{background:#0B5A53;border-color:#0B5A53;filter:none;}
+.btn.primary.lg{background:var(--accent);border-color:var(--accent);}
+.fbadge{border:1px solid var(--line);box-shadow:0 12px 28px -16px rgba(16,40,36,.30);}
+.newpill b{background:var(--accent);} .newpill:hover{border-color:var(--accent);}
+.term{border:1px solid #1D2B2A;background:#0E1716;box-shadow:0 24px 50px -32px rgba(16,40,36,.55);}
+.caret{background:#5EC8BB;}
+.pcard.p0{background:#E6F2EF;} .pcard.p1{background:#EAF0F7;} .pcard.p2{background:#F4F0E8;}
+.cta{background:#0E3A36;color:#F1F7F6;} .cta::before{display:none;} .cta p{color:#BFD8D3;}
+.cta .btn.primary,.cta .btn{background:#fff;color:#0B4A44;border-color:#fff;} .cta .btn.primary:hover,.cta .btn:hover{background:#E3F0EC;border-color:#E3F0EC;color:#0B4A44;}
+.foot{background:#0F1E1C;color:#9FB5B1;}
+.nav-links a.nav-tools:hover{background:#0B5A53;filter:none;}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .hero{background:linear-gradient(180deg,#0F1F1D,var(--paper));}
+  :root:not([data-theme="light"]) .term{background:#0B1312;} }
+:root[data-theme="dark"] .hero{background:linear-gradient(180deg,#0F1F1D,var(--paper));}
+.notice{background:#E3F0EC;color:#0B4A44;font-weight:500;border-bottom:1px solid var(--line);}
+.notice a{background:var(--accent);color:#fff;} .notice a:hover{background:#0B5A53;}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .notice{background:#10201E;color:#BFE3DC;} }
+:root[data-theme="dark"] .notice{background:#10201E;color:#BFE3DC;}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .nav-links a.nav-tools,:root:not([data-theme="light"]) .notice a{color:var(--accent-ink);} }
+:root[data-theme="dark"] .nav-links a.nav-tools,:root[data-theme="dark"] .notice a{color:var(--accent-ink);}
+.sec-head a,.sec-head p a{color:var(--accent);font-weight:600;}
+@media (max-width:640px){
+  .nav-links a[href="#guide"],.nav-links a[href="#templates"]{display:none;}
+  .nav-links{flex-wrap:nowrap;}
+  .hero h1.h1-kw{display:block;text-align:center;font-size:12px;}
+  .hero h1.h1-kw .live{display:inline-block;margin-right:6px;vertical-align:1px;}
+  .notice{font-size:13px;}
+}
 </style>
 <link rel="manifest" href="/manifest.webmanifest">
-<meta name="theme-color" content="#FBF7F3">
+<meta name="theme-color" content="#F4F7F6">
 <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="48x48" href="/icons/favicon-48.png">
 <meta name="apple-mobile-web-app-title" content="Resume SAT">
@@ -611,7 +645,7 @@ code{font-family:var(--mono);background:var(--card2);border:1px solid var(--line
     <div class="status" id="uploadStatus" aria-live="polite"></div>
     <div class="fbadge f1" aria-hidden="true"><i class="g"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#17895A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 7 13.5 15.5 8.5 10.5 2 17"/><path d="M16 7h6v6"/></svg></i><span><b>+31 points</b><small>after quick fixes</small></span></div>
     <div class="fbadge f2" aria-hidden="true"><i class="b"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1C5FB0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></i><span><b>Job match 82%</b><small>add the job post to see yours</small></span></div>
-    <div class="fbadge f3" aria-hidden="true"><i class="o"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E8591A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg></i><span><b>ATS can read it</b><small>single column, clean text</small></span></div>
+    <div class="fbadge f3" aria-hidden="true"><i class="o"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0F6E66" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg></i><span><b>ATS can read it</b><small>single column, clean text</small></span></div>
   </div>
   <div class="hero-fine"><span>Never stored on a server</span><span>No sign-up</span><span>18 ATS-safe templates</span><a href="#guide">New here? See the 6 steps</a></div>
 </div></section>
@@ -790,7 +824,7 @@ code{font-family:var(--mono);background:var(--card2);border:1px solid var(--line
 
 <section class="sec alt personas" aria-label="Made for every stage"><div class="wrap">
   <div class="sec-head center"><div><div class="kicker">Made for every stage</div><h2>Wherever you are in your career</h2></div></div>
-  <div class="pgrid"><div class="pcard p0"><i><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#E8591A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></i><h3>Freshers</h3><p>No experience? Build a resume from your projects, internship and skills.</p><a href="https://resumesat.com/fresher-resume-builder.html">✓ Fresher resume builder</a><a href="https://resumesat.com/interview-questions-generator.html">✓ Interview questions</a></div><div class="pcard p1"><i><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1C5FB0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="7" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></i><h3>Switching jobs</h3><p>Match your resume to each job post and track every application.</p><a href="https://resumesat.com/resume-job-match.html">✓ Resume vs job match</a><a href="https://resumesat.com/salary-hike-calculator.html">✓ Salary & notice period</a></div><div class="pcard p2"><i><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#17895A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/></svg></i><h3>Growing your career</h3><p>Sharpen LinkedIn, write cover letters and ask for referrals.</p><a href="https://resumesat.com/linkedin-profile-checker.html">✓ LinkedIn checker</a><a href="https://resumesat.com/referral-message-generator.html">✓ Referral messages</a></div></div>
+  <div class="pgrid"><div class="pcard p0"><i><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0F6E66" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></i><h3>Freshers</h3><p>No experience? Build a resume from your projects, internship and skills.</p><a href="https://resumesat.com/fresher-resume-builder.html">✓ Fresher resume builder</a><a href="https://resumesat.com/interview-questions-generator.html">✓ Interview questions</a></div><div class="pcard p1"><i><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1C5FB0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="7" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></i><h3>Switching jobs</h3><p>Match your resume to each job post and track every application.</p><a href="https://resumesat.com/resume-job-match.html">✓ Resume vs job match</a><a href="https://resumesat.com/salary-hike-calculator.html">✓ Salary & notice period</a></div><div class="pcard p2"><i><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#17895A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/></svg></i><h3>Growing your career</h3><p>Sharpen LinkedIn, write cover letters and ask for referrals.</p><a href="https://resumesat.com/linkedin-profile-checker.html">✓ LinkedIn checker</a><a href="https://resumesat.com/referral-message-generator.html">✓ Referral messages</a></div></div>
 </div></section>
 
 <section class="sec" id="guidesHome"><div class="wrap">
