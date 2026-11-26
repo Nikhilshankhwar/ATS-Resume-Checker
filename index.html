@@ -568,6 +568,27 @@ code{font-family:var(--mono);background:var(--card2);border:1px solid var(--line
 .cta .wrap{position:relative;}
 @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .hero{background-image:linear-gradient(rgba(139,156,255,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(139,156,255,.07) 1px,transparent 1px),radial-gradient(520px 520px at 4% 0%,rgba(139,92,246,.30),transparent 70%),radial-gradient(480px 480px at 96% 14%,rgba(34,211,238,.18),transparent 70%),linear-gradient(180deg,#120E1C,var(--paper));} }
 
+/* application form kit */
+#afkPanel h3{display:flex;align-items:center;gap:8px;}
+.afk-new{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;background:var(--accent);color:var(--accent-ink);border-radius:99px;padding:2px 8px;}
+.afk-top{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;margin-bottom:10px;}
+.afk-top label{font-weight:700;font-size:14px;} .afk-top select{min-width:210px;padding:8px 10px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:inherit;}
+.afk-score{font-size:14px;color:var(--muted);margin:4px 0 6px;} .afk-score b{font-size:20px;color:var(--ink);margin-right:4px;}
+.afk-checks{list-style:none;margin:0 0 12px;padding:0;display:grid;gap:6px;}
+.afk-checks li{display:flex;gap:10px;align-items:flex-start;padding:8px 10px;border-radius:10px;background:var(--card2);}
+.afk-checks li > span{flex:none;width:22px;height:22px;border-radius:99px;display:grid;place-items:center;font-weight:800;font-size:13px;color:#fff;background:var(--good);}
+.afk-checks li.bad > span{background:var(--bad);} .afk-checks li b{font-size:14px;} .afk-checks li p{margin:2px 0 0;font-size:13.5px;color:var(--muted);}
+.afk-tips{border:1px solid var(--line);border-radius:12px;padding:10px 14px;margin-bottom:12px;font-size:14px;} .afk-tips ul{margin:6px 0;padding-left:20px;} .afk-tips p{margin:4px 0 0;}
+.afk-sec{border-top:1px solid var(--line);padding:8px 0;} .afk-sec summary{cursor:pointer;font-weight:700;padding:4px 0;}
+.afk-card{border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin:8px 0;background:var(--card);} .afk-card > b{display:block;margin-bottom:4px;font-size:14px;}
+.afk-row{display:grid;grid-template-columns:150px 1fr auto;gap:8px;align-items:start;padding:5px 0;}
+.afk-row label{font-size:13px;font-weight:600;color:var(--muted);padding-top:7px;} .afk-row label small{display:block;font-weight:500;font-size:11.5px;opacity:.85;}
+.afk-row input,.afk-row textarea{width:100%;font:14px/1.45 var(--sans);padding:7px 9px;border:1px solid var(--line);border-radius:8px;background:var(--card2);color:var(--ink);resize:vertical;}
+.afk-row.afk-empty{grid-template-columns:150px 1fr;} .afk-miss{font-size:13px;color:var(--warn);padding-top:7px;} .afk-ok{font-size:13.5px;color:var(--good);font-weight:600;padding-top:7px;}
+.afk-row .btn.copied,.afk-chip.copied{background:var(--good);border-color:var(--good);color:#fff;}
+.afk-chips{display:flex;flex-wrap:wrap;gap:6px;} .afk-chip{border:1px solid var(--line);background:var(--card2);color:var(--ink);border-radius:99px;padding:5px 11px;font:500 13px var(--sans);cursor:pointer;} .afk-chip:hover{border-color:var(--accent);}
+@media (max-width:600px){ .afk-row{grid-template-columns:1fr auto;} .afk-row label{grid-column:1/-1;padding-top:0;} .afk-row.afk-empty{grid-template-columns:1fr;} }
+
 /* ===== calm teal theme (overrides the bright gradients and glows above) ===== */
 .hero{background:linear-gradient(180deg,#E3F0EC 0%,#EEF5F3 55%,var(--paper) 100%);background-size:auto;}
 .hero .h1-look em{background:none;-webkit-background-clip:initial;background-clip:initial;color:var(--accent);}
@@ -628,7 +649,7 @@ code{font-family:var(--mono);background:var(--card2);border:1px solid var(--line
 </div></nav>
 
 <section class="hero"><div class="wrap hero-in">
-  <a class="newpill" href="https://resumesat.com/tools.html"><b>NEW</b>LinkedIn checker, salary calculator and 8 more free tools</a>
+  <a class="newpill" href="https://resumesat.com/job-application-form-helper.html"><b>NEW</b>Workday and Oracle application form helper</a>
   <h1 class="h1-kw"><i class="live" aria-hidden="true"></i>Free ATS resume checker · AI scanner online</h1>
   <p class="h1-look">Get your resume past the software, and <em>into human hands</em></p>
   <p class="lead">Free ATS resume check in 10 seconds. See your score, fix what fails, download a clean resume. No sign-up.</p>
@@ -650,7 +671,7 @@ code{font-family:var(--mono);background:var(--card2);border:1px solid var(--line
   <div class="hero-fine"><span>Never stored on a server</span><span>No sign-up</span><span>18 ATS-safe templates</span><a href="#guide">New here? See the 6 steps</a></div>
 </div></section>
 
-<section class="tstrip" aria-label="Free job search tools"><div class="wrap"><div class="tstrip-in"><b class="tlabel">More free tools</b><a href="https://resumesat.com/resume-format-for-freshers.html"><span aria-hidden="true">⬇️</span>Resume formats (Word/PDF)</a><a href="https://resumesat.com/resume-job-match.html"><span aria-hidden="true">🎯</span>Resume vs job match</a><a href="https://resumesat.com/resume-headline-generator.html"><span aria-hidden="true">🧾</span>Naukri profile kit</a><a href="https://resumesat.com/linkedin-profile-checker.html"><span aria-hidden="true">💼</span>LinkedIn profile checker</a><a href="https://resumesat.com/fresher-resume-builder.html"><span aria-hidden="true">🎓</span>Fresher resume builder</a><a href="https://resumesat.com/cover-letter-generator.html"><span aria-hidden="true">✉️</span>Cover letter</a><a href="https://resumesat.com/interview-questions-generator.html"><span aria-hidden="true">🗣️</span>Interview questions</a><a href="https://resumesat.com/salary-hike-calculator.html"><span aria-hidden="true">💰</span>Salary & in-hand calculator</a><a href="https://resumesat.com/job-application-tracker.html"><span aria-hidden="true">📋</span>Job tracker</a><a href="https://resumesat.com/notice-period-calculator.html"><span aria-hidden="true">📅</span>Notice period</a><a href="https://resumesat.com/resignation-letter-generator.html"><span aria-hidden="true">📝</span>Resignation letter</a><a href="https://resumesat.com/referral-message-generator.html"><span aria-hidden="true">🤝</span>Referral message</a><a class="all" href="https://resumesat.com/tools.html">All tools →</a></div></div></section>
+<section class="tstrip" aria-label="Free job search tools"><div class="wrap"><div class="tstrip-in"><b class="tlabel">More free tools</b><a href="https://resumesat.com/job-application-form-helper.html"><span aria-hidden="true">🧩</span>Workday / Oracle form helper</a><a href="https://resumesat.com/resume-format-for-freshers.html"><span aria-hidden="true">⬇️</span>Resume formats (Word/PDF)</a><a href="https://resumesat.com/resume-job-match.html"><span aria-hidden="true">🎯</span>Resume vs job match</a><a href="https://resumesat.com/resume-headline-generator.html"><span aria-hidden="true">🧾</span>Naukri profile kit</a><a href="https://resumesat.com/linkedin-profile-checker.html"><span aria-hidden="true">💼</span>LinkedIn profile checker</a><a href="https://resumesat.com/fresher-resume-builder.html"><span aria-hidden="true">🎓</span>Fresher resume builder</a><a href="https://resumesat.com/cover-letter-generator.html"><span aria-hidden="true">✉️</span>Cover letter</a><a href="https://resumesat.com/interview-questions-generator.html"><span aria-hidden="true">🗣️</span>Interview questions</a><a href="https://resumesat.com/salary-hike-calculator.html"><span aria-hidden="true">💰</span>Salary & in-hand calculator</a><a href="https://resumesat.com/job-application-tracker.html"><span aria-hidden="true">📋</span>Job tracker</a><a href="https://resumesat.com/notice-period-calculator.html"><span aria-hidden="true">📅</span>Notice period</a><a href="https://resumesat.com/resignation-letter-generator.html"><span aria-hidden="true">📝</span>Resignation letter</a><a href="https://resumesat.com/referral-message-generator.html"><span aria-hidden="true">🤝</span>Referral message</a><a class="all" href="https://resumesat.com/tools.html">All tools →</a></div></div></section>
 
 <section class="sec b2ba" aria-label="Before and after example"><div class="wrap">
   <div class="sec-head center"><div><div class="kicker">See the difference</div><h2>One bullet, before and after</h2></div></div>
@@ -1387,6 +1408,164 @@ function insertNumber(b, q, v){
   return core + ' (' + v + ')' + end;
 }
 
+/* ---------- Application form kit: split the resume into the fields Workday, Oracle, SuccessFactors, iCIMS, Greenhouse and Lever ask for ---------- */
+const AFK_PLAT = {
+  workday:{name:'Workday', url:'myworkdayjobs.com', file:'A text PDF or Word (.docx) both work. Keep it to one column.',
+    tips:['“Autofill with Resume” does not fill the Skills and Languages boxes. Type them from the lists below.','Give every job a month and year, start and end. Missing dates are the most common autofill error.','Check every page after autofill: job titles, companies and dates often land in the wrong box.']},
+  oracle:{name:'Oracle Cloud / Taleo', url:'oraclecloud.com, taleo.net', file:'Upload Word (.docx). Older Taleo sites read Word more reliably than PDF.',
+    tips:['Use plain headings: Work Experience, Education, Skills.','Write dates as MM/YYYY or Month YYYY, for example 08/2024 or Aug 2024.','Use the exact words from the job post: Taleo ranks by keyword match.']},
+  sap:{name:'SAP SuccessFactors', url:'successfactors.com, jobs.sap.com', file:'Word (.docx) or a text PDF.',
+    tips:['Date fields often do not fill from the resume. Enter every From and To date yourself.','Used “Apply with LinkedIn”? Save the application before you attach your resume, or the filled fields can be overwritten.','Check the profile page after upload: it is what recruiters search.']},
+  icims:{name:'iCIMS', url:'icims.com', file:'Word (.docx) or a text PDF.',
+    tips:['Use standard headings so each part lands in the right field.','Your profile is saved and can be searched for other jobs, so keep it complete and correct.','Answer the screening questions carefully: they filter before a recruiter looks.']},
+  gh:{name:'Greenhouse / Lever', url:'greenhouse.io, jobs.lever.co', file:'A text PDF is best: recruiters usually open your actual file.',
+    tips:['The form is short: name, email, phone and LinkedIn are used to create or match your profile, so they must be correct.','Add your LinkedIn URL. These systems use it to match your profile.','Write a short answer for every “Why this company” or custom question.']},
+  other:{name:'Other / not sure', url:'', file:'Word (.docx) or a text PDF, one column.',
+    tips:['Look at the web address of the application page to find the system.','Use standard headings and month-year dates for every job.']}
+};
+let afkPlat = (store.get && store.get('rsat_afk')) || 'workday', afkVals = [];
+const COMPANY_RE = /\b(pvt|private|ltd|limited|inc|llp|llc|corp|corporation|company|technologies|technology|solutions|systems|services|industries|bank|consultants?|consulting|consultancy|group|labs|software|infotech|international|enterprises|associates|motors|pharma|pharmaceuticals|hospitals?|schools?|college|university|railways?|metro|authority|institute|traders|retail|store|mart|media|foods|chemicals|steels?|power|energy|logistics|finance|capital|insurance|telecom|networks)\b|&\s*co\b/i;
+const ROLE_RE = new RegExp('\\b(' + ROLE_NOUN + '|intern|trainee|executive|assistant|representative|teacher|tutor|nurse|clerk|agent|staff|apprentice|operator|electrician|technician|helper|cashier|salesman)s?\\b','i');
+const CITY_RE = /^(?:[A-Za-z .]+,\s*)?(india|delhi|new delhi|noida|greater noida|gurgaon|gurugram|mumbai|navi mumbai|thane|pune|bengaluru|bangalore|hyderabad|secunderabad|chennai|kolkata|ahmedabad|jaipur|lucknow|kanpur|chandigarh|mohali|indore|bhopal|kochi|coimbatore|nagpur|surat|vadodara|remote|ghaziabad|faridabad|patna|bhubaneswar|visakhapatnam|vizag|mysuru|mysore|dehradun|ranchi|raipur|guwahati|nashik|rajkot|ludhiana|amritsar|agra|varanasi|prayagraj|allahabad|meerut|uttar pradesh|maharashtra|karnataka|tamil nadu|telangana|gujarat|rajasthan|haryana|punjab|kerala|west bengal|madhya pradesh|bihar|odisha|dubai|abu dhabi|doha|riyadh|singapore|london|usa|uk)$/i;
+const DEG_RE = /\b(b\.?\s?tech|b\.?\s?e\.?(?=[\s,(]|$)|b\.?\s?sc|b\.?\s?com|b\.?\s?a\.?(?=[\s,(]|$)|bba|bca|mba|mca|m\.?\s?tech|m\.?\s?sc|m\.?\s?com|m\.?\s?a\.?(?=[\s,(]|$)|ph\.?\s?d|pgdm|llb|mbbs|b\.?\s?pharm|gnm|anm|iti|diploma|bachelor[a-z]*(?:\s+of\s+[a-z]+)?|master[a-z]*(?:\s+of\s+[a-z]+)?|class\s*(?:x|xii|1[02])\b|1[02]th|hsc|ssc|intermediate|matriculation|senior secondary|secondary)/i;
+const SCHOOL_RE = /universit|college|institut|school|academy|\biit\b|\bnit\b|\biiit\b|board|\b[a-z]{1,3}se\b|\b[a-z]{1,3}seb\b|\bicse\b|\bnios\b|vidyalaya|polytechnic|\bjntu|\baktu\b|\bvtu\b|campus/i;
+const GRADE_RE = /\b\d{1,2}(?:\.\d+)?\s?%|\bc?gpa\s*[:\-]?\s*\d+(?:\.\d+)?(?:\s*\/\s*10)?|\b\d(?:\.\d+)?\s*c?gpa\b|first division|second division|first class|distinction/i;
+const mmYYYY = ym => String(ym%12+1).padStart(2,'0') + '/' + Math.floor(ym/12);
+const yOnly = s => /^\s*(?:19|20)\d{2}\s*$/.test(s||'');
+function afkSplit(s){ const out=[]; let d=0, cur=''; for(const ch of s){ if(ch==='('||ch==='[') d++; if(ch===')'||ch===']') d=Math.max(0,d-1); if(d===0 && /[,;|•·]/.test(ch)){ out.push(cur); cur=''; } else cur+=ch; } out.push(cur); return out.map(x=>x.trim().replace(/\.$/,'')).filter(Boolean); }
+function afkJob(t, date){
+  let rng = date || ((t.match(DATE_RE)||[])[0] || '');
+  let rest = date ? t : t.replace(DATE_RE, ' ');
+  const dur = (rest.match(/\b\d+\s*\+?\s*(?:months?|mos?|years?|yrs?)\b/i)||[''])[0]; if(dur) rest = rest.replace(dur,' ');
+  rest = rest.replace(/\(\s*\)|\[\s*\]/g,' ');
+  let parts = rest.split(/\s*(?:[,|·—–]|\s-\s|\bat\b|@)\s*/).map(s=>{ s=s.trim(); if(/^\(/.test(s) && !/\)/.test(s)) s=s.slice(1); if(/\)$/.test(s) && !/\(/.test(s)) s=s.slice(0,-1); return s.trim(); }).filter(s=>s && !/^(?:from|to|since)$/i.test(s));
+  let title='', company='', loc='';
+  parts = parts.filter(p=>{ if(!loc && CITY_RE.test(p) && !COMPANY_RE.test(p)){ loc = p; return false; } return true; });
+  let i = parts.findIndex(p=>COMPANY_RE.test(p) && !(ROLE_RE.test(p) && !/\b(pvt|ltd|limited|inc|llp|llc|corp)\b/i.test(p))); if(i>=0) company = parts.splice(i,1)[0];
+  i = parts.findIndex(p=>ROLE_RE.test(p)); if(i>=0) title = parts.splice(i,1)[0];
+  if(!company && parts.length) company = parts.shift();
+  if(!title && parts.length && parts[0].split(/\s+/).length<=6) title = parts.shift();
+  if(!loc && parts.length && parts[0].split(/\s+/).length<=3) loc = parts.shift();
+  let from='', to='', current=false, yearOnly=false;
+  const m = rng && rng.match(DATE_RE);
+  if(m){ const a = parseYM(m[1], false), b = parseYM(m[2], true); current = /present|current|till/i.test(m[2]);
+    from = a==null ? '' : yOnly(m[1]) ? String(Math.floor(a/12)) : mmYYYY(a);
+    to = current ? '' : b==null ? '' : yOnly(m[2]) ? String(Math.floor(b/12)) : mmYYYY(b);
+    yearOnly = yOnly(m[1]) || (!current && yOnly(m[2])); }
+  return {title, company, loc, from, to, current, dur:dur.trim(), yearOnly, desc:[]};
+}
+function afkEdu(t){
+  let from='', to=''; const dm = t.match(DATE_RE);
+  if(dm){ from = (dm[1].match(/(?:19|20)\d{2}/)||[''])[0]; to = /present|current/i.test(dm[2]) ? 'Present' : (dm[2].match(/(?:19|20)\d{2}/)||[''])[0]; }
+  else { const ys = t.match(/\b(?:19|20)\d{2}\b/g); if(ys){ to = ys[ys.length-1]; if(ys.length>1) from = ys[0]; } }
+  const grade = (t.match(GRADE_RE)||[''])[0].trim();
+  let rest = t.replace(DATE_RE,' ').replace(grade,' ').replace(/\b(?:19|20)\d{2}\b/g,' ');
+  const parts = rest.split(/\s*(?:[,|·—–()]|\s-\s)\s*/).map(s=>s.trim()).filter(s=>s && !/^(?:in|of|from)$/i.test(s));
+  let degree='', field='', school='';
+  const di = parts.findIndex(p=>DEG_RE.test(p));
+  if(di>=0){ const p = parts[di]; const dm2 = p.match(DEG_RE); degree = dm2[0].trim(); const after = p.slice(dm2.index + dm2[0].length).replace(/^\s*(?:in|of|-)\s*/i,'').trim(); if(after && !SCHOOL_RE.test(after)) field = after; else if(after && SCHOOL_RE.test(after)) school = after; parts.splice(di,1); }
+  const si = parts.findIndex(p=>SCHOOL_RE.test(p)); if(si>=0 && !school) school = parts.splice(si,1)[0];
+  if(!field){ const fi = parts.findIndex(p=>!CITY_RE.test(p) && !SCHOOL_RE.test(p) && p.length<60 && /[a-z]/i.test(p)); if(fi>=0 && fi < 2) field = parts.splice(fi,1)[0]; }
+  if(!school){ const ri = parts.findIndex(p=>!CITY_RE.test(p) && p.length>3); if(ri>=0) school = parts.splice(ri,1)[0]; }
+  return {degree, field, school, from, to, grade};
+}
+function afkParse(text){
+  const clean = stripNotes(text), blocks = textToBlocks(clean), lines = clean.split('\n').map(s=>s.trim()).filter(Boolean);
+  const K = {first:'', last:'', email:'', phone:'', city:'', linkedin:'', github:'', web:'', summary:'', jobs:[], edu:[], skills:[], certs:[], langs:[], heads:[], contactTop:false};
+  const nm = ((blocks.find(b=>b.type==='name')||{}).text || lines[0] || '').replace(/\(.*?\)/g,'').replace(/[^A-Za-z .'-]/g,' ').replace(/\s+/g,' ').trim();
+  const np = nm.split(' '); K.last = np.length>1 ? np.pop() : ''; K.first = np.join(' ');
+  K.email = (clean.match(/[\w.+-]+@[\w-]+(?:\.[\w-]+)+/)||[''])[0].replace(/^(?:e-?mail|mail|email\s*id|id)\s*[-:.]?\s*/i,'');
+  K.phone = ((clean.match(/(?:\+?\s?91[\s-]?)?(?<![\d])[6-9]\d{4}[\s-]?\d{5}(?![\d])/)||clean.match(/\+\d[\d\s()-]{8,16}\d/)||[''])[0]).trim();
+  K.linkedin = (clean.match(/(?:https?:\/\/)?(?:[a-z]{2,3}\.)?linkedin\.com\/in\/[\w%-]+\/?/i)||[''])[0];
+  K.github = (clean.match(/(?:https?:\/\/)?github\.com\/[\w-]+/i)||[''])[0];
+  const locLine = clean.match(/location\s*[-:–]\s*([^\n|]+)/i);
+  if(locLine) K.city = locLine[1].trim();
+  else { for(const l of lines.slice(0,6)){ if(!CONTACT_LINE.test(l)) continue; const c = l.split(/\s*[|•·]\s*/).find(x=>CITY_RE.test(x.trim()) || /,\s*(india|[A-Z][a-z]+)$/.test(x.trim()) && !/@|\d{5}/.test(x)); if(c){ K.city = c.trim(); break; } } }
+  K.contactTop = lines.slice(0,6).some(l=>/@/.test(l)) && lines.slice(0,6).some(l=>/\d{5}/.test(l));
+  let key='top', cur=null; const sum=[];
+  blocks.forEach(b=>{
+    if(b.type==='head'){ key = /language/i.test(b.text) ? 'languages' : /contact|personal/i.test(b.text) ? 'contact' : keyOf(b.text); K.heads.push({text:b.text, key}); cur=null; return; }
+    const t = (b.text||'').trim(); if(!t) return;
+    if(key==='summary'){ sum.push(t); return; }
+    if(key==='experience'){
+      const dm = DATE_RE.test(t);
+      const lone = b.type!=='bullet' && !dm && t.split(/\s+/).length<=7 && ROLE_RE.test(t) && !/[.;:]$/.test(t);
+      const head = lone || b.type==='bold' || !!b.date || (dm && b.type!=='bullet') || (b.type==='bullet' && t.length<150 && /[·|]/.test(t) && (COMPANY_RE.test(t) || /\b\d+\s*\+?\s*(?:months?|years?|yrs?)\b/i.test(t) || dm));
+      if(head){ const j = afkJob(t, b.date); if(cur && !cur.desc.length && (!cur.title || !cur.company || !cur.from)){ ['title','company','loc','from','to','dur'].forEach(f=>{ if(!cur[f] && j[f]) cur[f]=j[f]; }); if(j.current) cur.current=true; if(j.from) cur.yearOnly=j.yearOnly; } else { cur = j; K.jobs.push(cur); } return; }
+      if(cur) cur.desc.push(t); return;
+    }
+    if(key==='education'){ const te = t + (b.date ? ' — ' + b.date : ''); if(DEG_RE.test(t)) K.edu.push(afkEdu(te)); else K.certs.push(te); return; }
+    if(key==='skills'){ afkSplit(t.replace(/^[^:]{2,32}:\s*/,'')).forEach(s=>K.skills.push(s)); return; }
+    if(key==='certifications'){ K.certs.push(t + (b.date ? ' — ' + b.date : '')); return; }
+    if(key==='languages'){ afkSplit(t.replace(/^languages?\s*:\s*/i,'')).forEach(s=>K.langs.push(s)); return; }
+  });
+  if(!K.langs.length){ const lm = clean.match(/languages?\s*(?:known)?\s*[:\-]\s*([^\n]+)/i); if(lm) afkSplit(lm[1]).forEach(s=>K.langs.push(s)); }
+  K.summary = sum.join(' ');
+  const seen = new Set(); K.skills = K.skills.filter(s=>{ const k=s.toLowerCase(); if(seen.has(k) || s.length>60) return false; seen.add(k); return true; });
+  return K;
+}
+function afkChecks(K, plat){
+  const out = [], add = (ok, label, fix) => out.push({ok, label, fix});
+  const multi = pdfInfo ? pdfInfo.multiCol : false;
+  add(!multi, 'One-column layout', 'Your file has two columns. These systems read straight across the page and mix the columns. Download a single-column version below and upload that.');
+  add(K.contactTop, 'Name, email and phone at the top', 'Put your email and phone on the line under your name, not in a side panel or at the bottom. The form fills contact details from the top of the resume.');
+  const has = k => K.heads.some(h=>h.key===k);
+  const miss = ['experience','education','skills'].filter(k=>!has(k));
+  add(!miss.length, 'Experience, Education and Skills headings', `Add a heading for: ${miss.join(', ')}. The parser uses headings to decide which form section each line goes to.`);
+  const mixed = K.heads.filter(h=>/\s(and|&)\s|\//i.test(h.text) && h.key!=='other');
+  if(plat!=='gh') add(!mixed.length, 'One topic per heading', `Split “${mixed.map(h=>h.text).join('”, “')}” into separate headings (for example EDUCATION and CERTIFICATIONS), so each part lands in its own form section.`);
+  const noTitle = K.jobs.filter(j=>!j.title).length, noCo = K.jobs.filter(j=>!j.company).length;
+  if(K.jobs.length) add(!noTitle && !noCo, 'Job title and company for every job', `${noTitle ? noTitle + ' job(s) have no clear job title' : ''}${noTitle && noCo ? ' and ' : ''}${noCo ? noCo + ' job(s) have no company' : ''}. Write each job as one line: Job Title, Company — Mon YYYY – Mon YYYY.`);
+  const badDate = K.jobs.filter(j=>!j.from || j.yearOnly || (!j.to && !j.current)).length;
+  if(K.jobs.length) add(!badDate, 'Month and year for every job', `${badDate} job(s) have no dates, only a duration, or only a year. Forms ask for From and To month and year: write them like Aug 2024 – Present.`);
+  if(plat==='gh' || plat==='other') add(!!K.linkedin, 'LinkedIn URL', 'Add linkedin.com/in/your-name to the contact line. Greenhouse and Lever use it to match your profile.');
+  else add(!!K.linkedin, 'LinkedIn URL', 'Add linkedin.com/in/your-name to the contact line. Most forms have a separate box for it.');
+  if(plat==='oracle'){ const isPdf = fileInfo && fileInfo.kind==='pdf'; add(!isPdf, 'Word file for Oracle / Taleo', 'You uploaded a PDF. Download the Word (.docx) version below and upload that to Taleo.'); }
+  return out;
+}
+function afkRow(label, val, opts){
+  opts = opts || {}; const i = afkVals.push(val||'') - 1;
+  const v = esc(val||''), empty = !String(val||'').trim();
+  const box = opts.area ? `<textarea readonly rows="${Math.min(8, Math.max(2, String(val||'').split('\n').length+1))}">${v}</textarea>` : `<input type="text" readonly value="${v}">`;
+  return `<div class="afk-row${empty?' afk-empty':''}"><label>${label}${opts.note?`<small>${opts.note}</small>`:''}</label>${empty ? `<span class="afk-miss">${opts.missing||'Not found in your resume: fill it in the form yourself.'}</span>` : box}${empty?'':`<button class="btn sm" type="button" data-afk="${i}">Copy</button>`}</div>`;
+}
+function afkHtml(){
+  const text = resumeEl.value; afkVals = [];
+  const K = afkParse(text), P0 = AFK_PLAT[afkPlat] || AFK_PLAT.other, C = afkChecks(K, afkPlat);
+  const ok = C.filter(c=>c.ok).length;
+  const opts = Object.keys(AFK_PLAT).map(k=>`<option value="${k}" ${k===afkPlat?'selected':''}>${AFK_PLAT[k].name}</option>`).join('');
+  const jobs = K.jobs.map((j,n)=>`<div class="afk-card"><b>Job ${n+1}${j.title||j.company?': '+esc([j.title,j.company].filter(Boolean).join(', ')):''}</b>
+    ${afkRow('Job title', j.title, {missing:'Not found. Type your designation for this job.'})}${afkRow('Company', j.company)}${afkRow('Location', j.loc, {missing:'Not in your resume. Type the city.'})}
+    ${afkRow('From', j.from, {note:'MM/YYYY', missing:j.dur?`Only “${esc(j.dur)}” is written. Add the start month and year.`:'No start date found.'})}
+    ${j.current ? `<div class="afk-row"><label>To</label><span class="afk-ok">Tick “I currently work here”</span></div>` : afkRow('To', j.to, {note:'MM/YYYY', missing:'No end date found.'})}
+    ${afkRow('Role description', j.desc.map(d=>'• '+d).join('\n'), {area:true, note:`${j.desc.join(' ').length} characters`, missing:'No bullet points under this job.'})}</div>`).join('') || '<p class="hint">No jobs were found under an Experience heading. Freshers can skip this section in the form, or add internships here.</p>';
+  const edu = K.edu.map((e,n)=>`<div class="afk-card"><b>Education ${n+1}${e.degree?': '+esc(e.degree):''}</b>${afkRow('School or university', e.school)}${afkRow('Degree', e.degree)}${afkRow('Field of study', e.field, {missing:'Not found. Type your branch or stream, if the form asks.'})}${afkRow('From (year)', e.from, {missing:'Not in your resume.'})}${afkRow('To (year)', e.to, {missing:'Not in your resume.'})}${afkRow('Grade / CGPA', e.grade, {missing:'Not in your resume.'})}</div>`).join('') || '<p class="hint">No degree was found under an Education heading.</p>';
+  const skI = afkVals.push(K.skills.join('\n')) - 1, skC = afkVals.push(K.skills.join(', ')) - 1;
+  const chips = K.skills.map(s=>{ const i = afkVals.push(s)-1; return `<button type="button" class="afk-chip" data-afk="${i}" title="Copy">${esc(s)}</button>`; }).join('');
+  return `<div class="panel" id="afkPanel">
+    <h3>Application form kit <span class="afk-new">New</span></h3>
+    <p class="hint" style="margin:0 0 12px;">Applying on a company career site? Those forms (Workday, Oracle, SuccessFactors and others) ask for your details field by field. Pick the system, fix the red items, then copy each field into the form. Nothing leaves your browser.</p>
+    <div class="afk-top"><label for="afkPlat">Company’s system</label><select id="afkPlat">${opts}</select><span class="hint" style="margin:0;">${P0.url?`Web address has <b>${esc(P0.url)}</b>`:'Check the web address of the application page.'}</span></div>
+    <div class="afk-score"><b>${ok}/${C.length}</b> ready for ${esc(P0.name)}</div>
+    <ul class="afk-checks">${C.map(c=>`<li class="${c.ok?'ok':'bad'}"><span>${c.ok?'✓':'✗'}</span><div><b>${c.label}</b>${c.ok?'':`<p>${c.fix}</p>`}</div></li>`).join('')}</ul>
+    <div class="afk-tips"><b>${esc(P0.name)} tips</b><ul>${P0.tips.map(t=>`<li>${t}</li>`).join('')}</ul><p><b>File to upload:</b> ${P0.file}</p>
+      <div class="row" style="margin-top:8px;"><button class="btn primary sm" type="button" data-afkdl="docx">Download Word (.docx), ATS-safe</button><button class="btn sm" type="button" data-afkdl="pdf">Download PDF, ATS-safe</button></div></div>
+    <details class="afk-sec" open><summary>Personal details</summary>${afkRow('First name', K.first)}${afkRow('Last name', K.last)}${afkRow('Email', K.email)}${afkRow('Phone', K.phone.replace(/^\+?\s?91[\s-]?/,''), {note:'without +91'})}${afkRow('City', K.city)}${afkRow('LinkedIn', K.linkedin)}${K.github?afkRow('GitHub', K.github):''}</details>
+    <details class="afk-sec" open><summary>Work experience (${K.jobs.length})</summary>${jobs}</details>
+    <details class="afk-sec"><summary>Education (${K.edu.length})</summary>${edu}</details>
+    <details class="afk-sec"><summary>Skills (${K.skills.length})</summary><p class="hint">${afkPlat==='workday'?'Workday does not fill skills from your resume. ':''}Type each skill in the Skills box and pick the match from the list. Tap a skill to copy it.</p><div class="afk-chips">${chips||'<span class="hint">No Skills heading found.</span>'}</div>${K.skills.length?`<div class="row" style="margin-top:8px;"><button class="btn sm" type="button" data-afk="${skI}">Copy all, one per line</button><button class="btn sm" type="button" data-afk="${skC}">Copy all, with commas</button></div>`:''}</details>
+    ${K.langs.length||K.certs.length ? `<details class="afk-sec"><summary>Languages and certifications</summary>${K.langs.length?afkRow('Languages', K.langs.join(', ')):''}${K.certs.map((c,n)=>afkRow('Certification '+(n+1), c)).join('')}</details>`:''}
+    ${K.summary ? `<details class="afk-sec"><summary>Summary / cover note</summary>${afkRow('Summary', K.summary, {area:true, note:K.summary.length+' characters'})}</details>`:''}
+  </div>`;
+}
+function afkCopy(btn){
+  const v = afkVals[+btn.dataset.afk]; if(v==null) return;
+  const done = ()=>{ const old = btn.textContent; btn.classList.add('copied'); if(!btn.classList.contains('afk-chip')) btn.textContent = 'Copied ✓'; setTimeout(()=>{ btn.classList.remove('copied'); if(!btn.classList.contains('afk-chip')) btn.textContent = old; }, 1300); };
+  try{ navigator.clipboard.writeText(v).then(done, ()=>{ fallbackCopy(v); done(); }); }catch(e){ fallbackCopy(v); done(); }
+}
+function fallbackCopy(v){ const ta = document.createElement('textarea'); ta.value = v; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select(); try{ document.execCommand('copy'); }catch(e){} ta.remove(); }
+function afkRefresh(){ const el = $('afkPanel'); if(el){ const open = [...el.querySelectorAll('details')].map(d=>d.open); el.outerHTML = afkHtml(); const n = $('afkPanel'); if(n) [...n.querySelectorAll('details')].forEach((d,i)=>{ if(open[i]!=null) d.open = open[i]; }); } }
+
 function analyse(resume, jd){
   const W = walk(resume), bl = getBullets(W), bullets = bl.list;
   const checks = [];
@@ -1612,6 +1791,7 @@ function runSat(){
         <a href="https://resumesat.com/salary-hike-calculator.html"><b>💰 Salary calculator</b><span>New CTC and monthly in-hand pay.</span></a>
         <a href="https://resumesat.com/referral-message-generator.html"><b>🤝 Ask for a referral</b><span>A short LinkedIn or WhatsApp message.</span></a>
       </div></div>
+    ${afkHtml()}
     ${catHtml}${locked}
     ${R.J ? jobChangesHtml(R.J) : ''}
     ${skillsPanelHtml(!!R.J)}
@@ -1634,8 +1814,10 @@ function runSat(){
   { const st=$('edStale'); if(st) st.hidden=true; }
   syncEditor(); renderRack();
   const P = $('resultsPanel');
-  P.onchange = (e=>{ if(e.target.dataset && e.target.dataset.jc && jcPending!==null){ jcPending = null; const o=$('jcOut'); if(o) o.innerHTML='<p class="hint" style="margin-top:10px;">Your ticks changed. Press Preview changes again.</p>'; } });
+  P.onchange = (e=>{ if(e.target.id==='afkPlat'){ afkPlat = e.target.value; try{ store.set('rsat_afk', afkPlat); }catch(_){} afkRefresh(); return; } if(e.target.dataset && e.target.dataset.jc && jcPending!==null){ jcPending = null; const o=$('jcOut'); if(o) o.innerHTML='<p class="hint" style="margin-top:10px;">Your ticks changed. Press Preview changes again.</p>'; } });
   P.onclick = (e)=>{
+    const ak = e.target.closest('[data-afk]'); if(ak){ afkCopy(ak); return; }
+    const ad = e.target.closest('[data-afkdl]'); if(ad){ const safe = TEMPLATES.find(x=>x.id===tplId && !x.layout && !x.photo) ? tplId : 'corporate'; if(safe!==tplId){ const tb = document.querySelector(`[data-tpl="${safe}"]`); if(tb) tb.click(); } exportResume(ad.dataset.afkdl); return; }
     const fx = e.target.closest('[data-fix]');
     if(fx && !fx.disabled){ resumeEl.value = fixFns[+fx.dataset.fix](resumeEl.value); saveDraft(); syncEditor(); $('textWrap').open = true; fx.textContent='✓ Applied. Check again to rescore'; fx.disabled=true; fx.classList.add('done'); return; }
     const jp = e.target.closest('[data-jump]');
@@ -2948,10 +3130,11 @@ const REVIEW_URL = AI_ON_SITE ? AI_ENDPOINT.replace(/\/+$/,'') + '/review' : '';
 
 /* a free tool page on this site can hand over a resume and job description for the full check (same tab, never leaves the browser) */
 try{ const ho = sessionStorage.getItem('rsat_handoff'); if(ho){ sessionStorage.removeItem('rsat_handoff'); const o = JSON.parse(ho);
-  if(o && typeof o.resume==='string' && o.resume.trim().length>=40){ resumeEl.value = o.resume.slice(0,20000); if(typeof o.jd==='string') jdEl.value = o.jd.slice(0,12000); lastSampleJd=''; $('textWrap').open = true; setTimeout(()=>{ try{ toBench(); }catch(e){} }, 300); } } }catch(e){}
+  if(o && typeof o.resume==='string' && o.resume.trim().length>=40){ resumeEl.value = o.resume.slice(0,20000); if(typeof o.jd==='string') jdEl.value = o.jd.slice(0,12000); if(o.go==='afk') window.__afkGo = true; lastSampleJd=''; $('textWrap').open = true; setTimeout(()=>{ try{ toBench(); }catch(e){} }, 300); } } }catch(e){}
 /* show a report straight away when a draft was restored */
 syncEditor(); renderRack();
 if(resumeEl.value.trim().length>=40) runSat();
+if(window.__afkGo) setTimeout(()=>{ const k=$('afkPanel'); if(k) k.scrollIntoView({block:'start'}); }, 900);
 
 /* ---------- installable app (PWA): register the service worker and offer "Install app" ---------- */
 if(STANDALONE){
